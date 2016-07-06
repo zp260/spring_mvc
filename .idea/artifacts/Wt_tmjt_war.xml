@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Wt_tmjt:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="tmjt.war">
+      <element id="artifact" artifact-name="Wt_tmjt:war exploded" />
+    </root>
+  </artifact>
+</component>
