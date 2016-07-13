@@ -3,6 +3,7 @@ package com.wt.controller;
 import com.wt.model.User;
 import com.wt.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/reg")
+
+    @RequestMapping("/user/reg")
     public ModelAndView regUser(@ModelAttribute User user){
 
         List<String> powerList = new ArrayList<String>();
@@ -33,25 +35,28 @@ public class UserController {
 
         Map<String,List> map = new HashMap<String, List>();
         map.put("powerList",powerList);
-        return new ModelAndView("reg","map",map);
+        return new ModelAndView("/user/reg","map",map);
 
     }
 
-    @RequestMapping("/userlist")
+    @RequestMapping("/user/list")
     public ModelAndView getUserList(){
         List<User> userList = userService.getUserList();
-        return  new ModelAndView("userlist","userlist",userList);
+        return  new ModelAndView("/user/list","userlist",userList);
     }
 
-    @RequestMapping("/insert")
+    @RequestMapping("/user/insert")
     public String inserData(@ModelAttribute User user){
         if (user !=null){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.insertData(user);
         }
-        return "redirect:/userlist";
+        return "redirect:/user/list";
     }
 
-    @RequestMapping("useredit")
+    @RequestMapping("/user/edit")
     public ModelAndView useredit(@RequestParam int id,@ModelAttribute User user){
         user = userService.getUserById(id);
         List<String> powerList = new ArrayList<String>();
@@ -63,19 +68,19 @@ public class UserController {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("powerList",powerList);
         map.put("user",user);
-        return  new ModelAndView("useredit","map",map);
+        return  new ModelAndView("/user/edit","map",map);
     }
 
-    @RequestMapping("/update")
+    @RequestMapping("/user/update")
     public String updateUser(@ModelAttribute User user){
        userService.updateData(user);
-        return "redirect:/userlist";
+        return "redirect:/user/list";
     }
 
-    @RequestMapping("/userdelete")
+    @RequestMapping("/user/delete")
     public  String userDelete(@RequestParam int id){
         System.out.println("id="+id);
         userService.deleteData(id);
-        return "redirect:/userlist";
+        return "redirect:/user/list";
     }
 }

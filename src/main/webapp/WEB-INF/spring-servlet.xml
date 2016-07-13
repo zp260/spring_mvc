@@ -15,13 +15,12 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+
     <bean id="userDao" class="com.wt.dao.UserDaoImpl"/>
     <bean id="UserService" class="com.wt.services.UserServiceImpl"/>
+    <bean id="portDao" class="com.wt.dao.PortDaoImpl"/>
+    <bean id="PortService" class="com.wt.services.PortServiceImpl"/>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3307/tmjt?useUnicode=yes&amp;characterEncoding=UTF8"/>
-        <property name="username" value="mrz"/>
-        <property name="password" value="0000"/>
-    </bean>
+
+
 </beans>

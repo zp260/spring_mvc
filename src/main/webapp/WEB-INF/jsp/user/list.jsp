@@ -49,9 +49,9 @@
              ${user.userPower}
          </td>
          <td>
-             <a href="/useredit?id=${user.id}">编辑</a>
+             <a href="/user/edit?id=${user.id}">编辑</a>
          </td>
-         <td> <a href="/userdelete?id=${user.id}">删除</a></td>
+         <td> <a href="/user/delete?id=${user.id}">删除</a></td>
      </tr>
     </c:forEach>
  </table>

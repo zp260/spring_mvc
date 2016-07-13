@@ -14,7 +14,7 @@
     <title>用户编辑</title>
 </head>
 <body>
- <form:form method="post" action="/update" modelAttribute="user">
+ <form:form method="post" action="/user/update" modelAttribute="user">
      <table>
          <tr>
              <th>ID</th>

@@ -15,12 +15,15 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     @Autowired
     DataSource dataSource;
+
+    @Override
     public void insertData(User user){
         String sql="INSERT INTO users "+"(username,loginname,password,userpower) VALUES (?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),user.getPassword(),user.getUserPower()});
     }
 
+    @Override
     public List<User>  getUserList(){
         List userList = new ArrayList();
         String sql = "select * from users";

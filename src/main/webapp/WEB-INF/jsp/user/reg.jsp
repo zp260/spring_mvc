@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<form:form method="post" action="/insert" modelAttribute="user">
+<form:form method="post" action="/user/insert" modelAttribute="user">
     <table>
         <tr>
             <td>员工姓名 :</td>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
 
-            <td colspan="2"><a href="/userlist">用户列表</a></td>
+            <td colspan="2"><a href="/user/list">用户列表</a></td>
         </tr>
     </table>
 </form:form>
