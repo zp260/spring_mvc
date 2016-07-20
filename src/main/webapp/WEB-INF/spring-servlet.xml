@@ -16,11 +16,14 @@
     </bean>
 
 
-    <bean id="userDao" class="com.wt.dao.UserDaoImpl"/>
+    <bean id="UserDao" class="com.wt.dao.UserDaoImpl"/>
     <bean id="UserService" class="com.wt.services.UserServiceImpl"/>
-    <bean id="portDao" class="com.wt.dao.PortDaoImpl"/>
+    <bean id="PortDao" class="com.wt.dao.PortDaoImpl"/>
     <bean id="PortService" class="com.wt.services.PortServiceImpl"/>
-
+    <bean id="ContractDao" class="com.wt.dao.ContractDaoImpl"/>
+    <bean id="ContractService" class="com.wt.services.ContractServiceImpl"/>
+    <bean id="StageDao" class="com.wt.dao.StageDaoImpl"/>
+    <bean id="StageService" class="com.wt.services.StageServiceImpl"/>
 
 
 </beans>

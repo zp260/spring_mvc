@@ -1,11 +1,11 @@
 package com.wt.dao;
 
-import com.wt.jdbc.PortExtractor;
 import com.wt.jdbc.PortRowMapper;
 import com.wt.model.Port;
+import com.wt.model.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class PortDaoImpl implements PortDao {
     @Autowired
     DataSource dataSource;
 
+    @Override
     public void insertPort(Port port){
         String sql = "INSERT INTO ports (portname,orders) VALUES (?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

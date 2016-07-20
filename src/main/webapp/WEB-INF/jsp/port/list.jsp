@@ -14,7 +14,7 @@
 </head>
 <body>
 <c:forEach var="port" items="${ports}" >
-    <div>${port.portName}-${port.orders}<a href="/port/edit?id=${port.id}">编辑</a>
+    <div>id:${port.id}-${port.portName}-${port.orders}<a href="/port/edit?id=${port.id}">编辑</a>
         <a href="/port/delete?id=${port.id}">删除</a></div>
 </c:forEach>
 </body>
