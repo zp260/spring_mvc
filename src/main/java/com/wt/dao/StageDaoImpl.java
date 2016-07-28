@@ -8,26 +8,33 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import com.wt.controller.BaseController;
 
 /**
  * Created by mrz on 16/7/20.
  */
-public class StageDaoImpl implements StageDao {
+public class StageDaoImpl extends BaseController implements StageDao {
     @Autowired
     DataSource dataSource;
 
+
+
     @Override
     public void insert(Stage stage){
+
         String sql = "INSERT INTO stage (conSN,stageNum,goodsArriveCoalDate) VALUES (?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),stage.getGoodsArriveCoalDate()});
+        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),
+                Str2Date(stage.getGoodsArriveCoalDate())
+        });
 
     }
     @Override
     public void update(Stage stage){
-        String sql = "UPDATE stage SET conSN=?,stageNum=?,goodsArriveCoalDate=?";
+
+        String sql = "UPDATE stage SET conSN=?,stageNum=?,goodsArriveCoalDate=? WHERE id= ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),stage.getGoodsArriveCoalDate()});
+        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),Str2Date(stage.getGoodsArriveCoalDate()),stage.getId()});
 
     }
     @Override

@@ -13,4 +13,6 @@ public interface ContractDao {
     public void update(Contract contract);
     public List<Contract> ContractList();
     public Contract getContractById(int id);
+
+    public void verify(int id); //审核
 }

@@ -38,9 +38,9 @@
     </tr>
 <c:forEach var="con" items="${list}">
     <tr>
-      <td>${con.id}</td>
+      <td><a href="/conbase/edit?id=${con.id}">${con.id}</a></td>
       <td>${con.conSN}</td>
-      <td>${con.conTime}</td>
+      <td>${con.conDate}</td>
       <td>${con.isInport}</td>
       <td>${con.conVerify}</td>
       <td>${con.useORG}</td>
@@ -54,10 +54,12 @@
       <td>${con.lcFrom}</td>
       <td>${con.lcPrice}</td>
       <td>${con.lcStartDate}</td>
-      <td>${con.lcChangeTime}</td>
+      <td>${con.lcChangeDate}</td>
       <td>${con.lcChangeReason}</td>
       <td>${con.deliveryDate}</td>
       <td>${con.conFrom}</td>
+        <td><a href="/conbase/del?id=${con.id}">删除</a></td>
+        <td><a href="/conbase/verify?id=${con.id}">审核</a></td>
     </tr>
 </c:forEach>
 </table>

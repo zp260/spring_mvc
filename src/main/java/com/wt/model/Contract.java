@@ -10,7 +10,7 @@ import java.sql.Date;
 public class Contract {
     private int         id;
     private String      conSN;          //合同号
-    private Date        conTime;        //合同签订时间
+    private String        conDate;        //合同签订时间
     private Boolean     isInport;       //是否是进口
     private Boolean     conVerify;      //是否审核通过
     private String      useORG;         //使用单位
@@ -20,13 +20,13 @@ public class Contract {
     private BigDecimal  atDoller;       //折美元金额
     private BigDecimal  atRMB;          //折人民币金额
     private String      lcSN;           //LC编号
-    private Date        lcTimeLimit;    //LC开出期限
+    private String        lcTimeLimit;    //LC开出期限
     private String      lcFrom;         //LC开出行
     private BigDecimal  lcPrice;        //lc开证金额
-    private Date        lcStartDate;    //LC开出时间
-    private Date        lcChangeTime;   //lc改证时间
+    private String        lcStartDate;    //LC开出时间
+    private String        lcChangeDate;   //lc改证时间
     private String      lcChangeReason; //LC改证原因
-    private Date        deliveryDate;   //交货日期
+    private String        deliveryDate;   //交货日期
     private String      conFrom;        //合同来源
 
     public int getId(){ return id;}
@@ -35,8 +35,8 @@ public class Contract {
     public String getConSN(){return conSN;}
     public void setConSN(String conSN){this.conSN = conSN;}
 
-    public Date getConTime(){return conTime;}
-    public void  setConTime(Date conTime){this.conTime = conTime;}
+    public String getConDate(){return conDate;}
+    public void  setConDate(String conDate){this.conDate = conDate;}
 
     public Boolean getIsInport(){return isInport;}
     public void  setIsInport(Boolean isInport){this.isInport =  isInport;}
@@ -65,8 +65,8 @@ public class Contract {
     public String  getLcSN(){return  lcSN;}
     public void  setLcSN(String lcSN){this.lcSN = lcSN;}
 
-    public Date getLcTimeLimit(){return lcTimeLimit;}
-    public void setLcTimeLimit(Date lcTimeLimit){this.lcTimeLimit = lcTimeLimit;}
+    public String getLcTimeLimit(){return lcTimeLimit;}
+    public void setLcTimeLimit(String lcTimeLimit){this.lcTimeLimit = lcTimeLimit;}
 
     public String getLcFrom (){return lcFrom;}
     public void  setLcFrom(String lcFrom){this.lcFrom = lcFrom;}
@@ -74,17 +74,17 @@ public class Contract {
     public BigDecimal getLcPrice(){return lcPrice;}
     public void  setLcPrice(BigDecimal lcPrice){this.lcPrice = lcPrice;}
 
-    public Date getLcStartDate(){return lcStartDate;}
-    public void setLcStartDate(Date lcStartDate){this.lcStartDate = lcStartDate;}
+    public String getLcStartDate(){return lcStartDate;}
+    public void setLcStartDate(String lcStartDate){this.lcStartDate = lcStartDate;}
 
-    public Date getLcChangeTime(){return  lcChangeTime;}
-    public void setLcChangeTime(Date lcChangeTime){this.lcChangeTime = lcChangeTime;}
+    public String getLcChangeDate(){return  lcChangeDate;}
+    public void setLcChangeDate(String lcChangeDate){this.lcChangeDate = lcChangeDate;}
 
     public String getLcChangeReason(){return lcChangeReason;}
     public void  setLcChangeReason(String lcChangeReason){this.lcChangeReason = lcChangeReason;}
 
-    public Date getDeliveryDate(){return  deliveryDate;}
-    public void setDeliveryDate(Date deliveryDate){this.deliveryDate = deliveryDate;}
+    public String getDeliveryDate(){return  deliveryDate;}
+    public void setDeliveryDate(String deliveryDate){this.deliveryDate = deliveryDate;}
 
     public String getConFrom(){return conFrom;}
     public void setConFrom(String conFrom){this.conFrom = conFrom;}

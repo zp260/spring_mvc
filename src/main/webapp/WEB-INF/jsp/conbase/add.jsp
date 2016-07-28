@@ -16,7 +16,7 @@
 <form:form action="/conbase/insert" method="post" modelAttribute="contract">
 
             <li>合同号         <form:input path="conSN"/></li>
-            <li>合同签订时间  <form:input path="conTime"/></li>
+            <li>合同签订时间  <form:input path="conDate"/></li>
             <li>是否是进口 <form:input path="isInport"/></li>
             <li>是否审核通过 <form:input path="conVerify"/></li>
             <li>使用单位 <form:input path="useORG"/></li>
@@ -30,7 +30,7 @@
             <li>LC开出行 <form:input path="lcFrom"/></li>
             <li>lc开证金额 <form:input path="lcPrice"/></li>
             <li>LC开出时间 <form:input path="lcStartDate"/></li>
-            <li>lc改证时间 <form:input path="lcChangeTime"/></li>
+            <li>lc改证时间 <form:input path="lcChangeDate"/></li>
             <li>LC改证原因 <form:input path="lcChangeReason"/></li>
             <li>交货日期 <form:input path="deliveryDate"/></li>
             <li>合同来源 <form:input path="conFrom"/></li>

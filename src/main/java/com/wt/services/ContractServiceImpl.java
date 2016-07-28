@@ -30,4 +30,5 @@ public class ContractServiceImpl implements ContractService {
         return  contractDao.getContractById(id);
 
     }
+    public void verify(int id){ contractDao.verify(id);}
 }

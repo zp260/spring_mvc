@@ -1,5 +1,6 @@
 package com.wt.dao;
 
+import com.wt.controller.BaseController;
 import com.wt.jdbc.ContractRowMapper;
 import com.wt.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by mrz on 16/7/14.
  */
-public class ContractDaoImpl implements ContractDao {
+public class ContractDaoImpl extends BaseController implements ContractDao {
 
     @Autowired
     DataSource dataSource;
@@ -21,7 +23,7 @@ public class ContractDaoImpl implements ContractDao {
     public void insert(Contract contract){
         String sql = "INSERT INTO conBase (" +
                 "conSN," +
-                "conTime," +
+                "conDate," +
                 "isInport," +
                 "conVerify," +
                 "useORG," +
@@ -35,7 +37,7 @@ public class ContractDaoImpl implements ContractDao {
                 "lcFrom," +
                 "lcPrice," +
                 "lcStartDate," +
-                "lcChangeTime," +
+                "lcChangeDate," +
                 "lcChangeReason," +
                 "deliveryDate," +
                 "conFrom" +
@@ -43,7 +45,7 @@ public class ContractDaoImpl implements ContractDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
                 contract.getConSN(),
-                contract.getConTime(),
+                Str2Date(contract.getConDate()),
                 contract.getIsInport(),
                 contract.getConVerify(),
                 contract.getUseORG(),
@@ -53,13 +55,13 @@ public class ContractDaoImpl implements ContractDao {
                 contract.getAtDoller(),
                 contract.getAtRMB(),
                 contract.getLcSN(),
-                contract.getLcTimeLimit(),
+                Str2Date(contract.getLcTimeLimit()),
                 contract.getLcFrom(),
                 contract.getLcPrice(),
                 contract.getLcStartDate(),
-                contract.getLcChangeTime(),
+                Str2Date(contract.getLcChangeDate()),
                 contract.getLcChangeReason(),
-                contract.getDeliveryDate(),
+                Str2Date(contract.getDeliveryDate()),
                 contract.getConFrom()
         });
 
@@ -76,7 +78,7 @@ public class ContractDaoImpl implements ContractDao {
     public void update(Contract contract){
         String sql = "UPDATE conBase SET " +
                 "conSN=?," +
-                "conTime=?," +
+                "conDate=?," +
                 "isInport=?," +
                 "conVerify=?," +
                 "useORG=?," +
@@ -90,7 +92,7 @@ public class ContractDaoImpl implements ContractDao {
                 "lcFrom=?," +
                 "lcPrice=?," +
                 "lcStartDate=?," +
-                "lcChangeTime=?," +
+                "lcChangeDate=?," +
                 "lcChangeReason=?," +
                 "deliveryDate=?," +
                 "conFrom=?" +
@@ -98,7 +100,7 @@ public class ContractDaoImpl implements ContractDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
                 contract.getConSN(),
-                contract.getConTime(),
+                Str2Date(contract.getConDate()),
                 contract.getIsInport(),
                 contract.getConVerify(),
                 contract.getUseORG(),
@@ -108,13 +110,13 @@ public class ContractDaoImpl implements ContractDao {
                 contract.getAtDoller(),
                 contract.getAtRMB(),
                 contract.getLcSN(),
-                contract.getLcTimeLimit(),
+                Str2Date(contract.getLcTimeLimit()),
                 contract.getLcFrom(),
                 contract.getLcPrice(),
-                contract.getLcStartDate(),
-                contract.getLcChangeTime(),
+                Str2Date(contract.getLcStartDate()),
+                Str2Date(contract.getLcChangeDate()),
                 contract.getLcChangeReason(),
-                contract.getDeliveryDate(),
+                Str2Date(contract.getDeliveryDate()),
                 contract.getConFrom(),
                 contract.getId()
         });
@@ -136,4 +138,12 @@ public class ContractDaoImpl implements ContractDao {
         contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return  contractList.get(0);
     }
+
+    @Override
+    public void verify(int id){
+        String sql = "UPDATE conBase SET conVerify=TRUE WHERE id=?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update(sql,new Object[]{id});
+    }
+
 }
