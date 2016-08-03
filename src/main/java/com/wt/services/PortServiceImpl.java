@@ -3,12 +3,14 @@ package com.wt.services;
 import com.wt.dao.PortDao;
 import com.wt.model.Port;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by mrz on 16/7/8.
  */
+@Service
 public class PortServiceImpl implements PortService{
     @Autowired
     PortDao portDao;

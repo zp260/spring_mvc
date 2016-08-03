@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import com.wt.controller.BaseController;
@@ -23,10 +25,76 @@ public class StageDaoImpl extends BaseController implements StageDao {
     public void insert(Stage stage){
 
         String sql = "INSERT INTO stage (conSN,stageNum,goodsArriveCoalDate) VALUES (?,?,?)";
+        String sqlstr= setInsertSql(stage,"stage","id");
+        System.out.println(sqlstr);
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),
-                Str2Date(stage.getGoodsArriveCoalDate())
+
+        try {
+            Object ob = setInsertObj(stage,"id");
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Object[] ob = new Object[50];
+
+
+        jdbcTemplate.update(sqlstr,new Object[]{
+                stage.getConSN(),
+                stage.getStageNum(),
+                Str2Date(stage.getGoodsArriveCoalDate()),
+                Str2Date(stage.getGoodsSendETime()),
+                Str2Date(stage.getGoodsSendATime()),
+                Str2Date(stage.getGoodsArriveETime()),
+                Str2Date(stage.getGoodsArriveATime()),
+                Str2Date(stage.getEbDate()),
+                Str2Date(stage.getBankNoticeBillTime()),
+                Str2Date(stage.getBillTime()),
+                Str2Date(stage.getBillToCustomsDate()),
+                stage.getCdSN(),
+                stage.getCdPdf(),
+                Str2Date(stage.getCdTime()),
+                stage.getCdPrice(),
+                Str2Date(stage.getPortDate()),
+                stage.getPort(),
+                stage.getGetDocPdf(),
+                stage.getInvoicePdf(),
+                stage.getCoPdf(),
+                stage.getBoxDocPdf(),
+                stage.getTaxDate(),
+                stage.getTariffs(),
+                stage.getTariffsPdf(),
+                stage.getVat(),
+                stage.getVatPdf(),
+                stage.getSpecialTariff(),
+                stage.getSpecialTariffPdf(),
+                stage.getPaytax(),
+                stage.getLateFee(),
+                stage.getInspectionSN(),
+                stage.getInspectionPdf(),
+                Str2Date(stage.getInspectionTime()),
+                Str2Date(stage.getPassTime()),
+                Str2Date(stage.getContainerCheckTime()),
+                stage.getInspectionCharges(),
+                stage.getFumigationCharges(),
+                Str2Date(stage.getOpenContainerTime()),
+                stage.getOpenContainerResoult(),
+                Str2Date(stage.getFhApproveBillTime()),
+                stage.getFhReason(),
+                stage.getFhPrice(),
+                stage.getFhMoneySeed(),
+                stage.getFhMoneyExchange(),
+                stage.getFhRMBprice(),
+                stage.getFhRMBexchange(),
+                stage.getFhDollarPrice(),
+                stage.getFhDollarExchange(),
+                Str2Date(stage.getBankFHtime()),
+                Str2Date(stage.getGetFHtime())
         });
+
+
 
     }
     @Override

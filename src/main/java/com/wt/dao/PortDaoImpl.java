@@ -5,6 +5,7 @@ import com.wt.model.Port;
 import com.wt.model.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 
 import javax.sql.DataSource;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Created by mrz on 16/7/8.
  */
+@Repository
 public class PortDaoImpl implements PortDao {
     @Autowired
     DataSource dataSource;
