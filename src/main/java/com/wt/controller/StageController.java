@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,7 @@ public class StageController extends BaseController {
             stageService.insert(stage);
         }
 
+
         return "redirect:/stage/list";
     }
 
@@ -54,9 +58,13 @@ public class StageController extends BaseController {
 
     @RequestMapping("/stage/edit")
     public ModelAndView edit(@RequestParam int id,@ModelAttribute Stage stage){
-        stage = stageService.getStageById(id);
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("stage",stage);
-        return new ModelAndView("/stage/edit","map",map);
+       Stage stage1 = stageService.getStageById(id);
+        return new ModelAndView("/stage/edit","stage",stage1);
+    }
+
+    @RequestMapping("/stage/upload")
+    public String upload(@RequestParam(value = "file",required = false)MultipartFile file){
+
+        return "/stage/upload";
     }
 }

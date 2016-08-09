@@ -10,11 +10,12 @@
 <html>
 <head>
     <title>Title</title>
+
 </head>
 <body>
+
 <form:form action="/stage/insert" method="post" modelAttribute="stage">
     <ul>
-
         <li>
             <label>合同号</label>
             <form:input path="conSN"/></li>
@@ -53,7 +54,8 @@
             <form:input path="cdSN"/></li>
         <li>
             <label>（进出口）报关单电子版</label>
-            <form:input path="cdPdf"/></li>
+            <form:input path="cdPdf"/>
+        </li>
         <li>
             <label>（进出口）报关申报日期</label>
             <form:input path="cdTime"/></li>
@@ -170,5 +172,6 @@
         <li><input type="submit" value="提交"></li>
     </ul>
 </form:form>
+
 </body>
 </html>

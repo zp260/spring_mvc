@@ -7,15 +7,14 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import java.text.Format;
 import java.text.ParseException;
-import java.util.List;
 
 
 /**
@@ -129,17 +128,44 @@ public class BaseController {
     //@dataBaseName 要插入的数据库表名
     //@extProperty 要排除的字段ID
 
+
     public String setInsertSql(Object object,String dataBaseName,String extProperty){
         Class classType = object.getClass();
         Field[] fields = classType.getDeclaredFields();
+
         String sqlStartStr = "INSERT INTO " + dataBaseName + " (" ;
         String sqlPropertyStr = "";
         String sqlStartValues= ") VALUES (";
         String sqlValues="";
         String sqlEndValues = ")";
+
+
+
+        Object[] objects = new Object[fields.length-1];
+        int j = 0;
         for (int i=0;i<fields.length;i++) {
+
             String fieldName =  fields[i].getName();
+            PropertyDescriptor propertyDescriptor = null;
+            try {
+                propertyDescriptor = new PropertyDescriptor(fieldName,classType);
+            } catch (IntrospectionException e) {
+                e.printStackTrace();
+            }
+            Method fieldMethod = propertyDescriptor.getReadMethod();
+
+
             if (fieldName != extProperty){
+
+                try {
+                    objects[j] = fieldMethod.invoke(object,null);
+                    j++;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+
                 //最后一个字段不加逗号
                 if (i== fields.length-1){
                     sqlPropertyStr +=   fieldName;
@@ -149,7 +175,11 @@ public class BaseController {
                     sqlValues += "?,";
                 }
             }
+
         }
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("sql",sqlStartStr+sqlPropertyStr+sqlStartValues+sqlValues+sqlEndValues);
+        map.put("object",objects);
         return sqlStartStr+sqlPropertyStr+sqlStartValues+sqlValues+sqlEndValues;
     }
 //生成插入数据的序列对象
@@ -164,7 +194,7 @@ public class BaseController {
             if(fieldName != extProperty){
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(fieldName,classType);
                 Method fieldMethod = propertyDescriptor.getReadMethod();
-                System.out.println(fieldMethod.getName());
+                System.out.println("stage."+fieldMethod.getName()+"(),");
 
                 switch (fieldClass.getName()){
                     case "java.lang.String":

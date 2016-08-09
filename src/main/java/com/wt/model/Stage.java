@@ -8,6 +8,7 @@ import java.sql.Date;
 /**
  * Created by mrz on 16/7/20.
  */
+
 public class Stage {
     private int         id;                     //id
     private String      conSN;                  //合同号
@@ -17,7 +18,7 @@ public class Stage {
     private String      goodsSendETime;         //（进出口）批次（货物）预计发货时间
     private String      goodsSendATime;         //（进出口）批次（货物）实际发货时间
     private String      goodsArriveETime;       //（进出口）批次（货物）预计到港时间
-    private String      goodsArriveATime;       //（进出口）批次   (货物)  实际到港时间
+    private String      goodsArriveATime;       //（进出口）批次 (货物) 实际到港时间
 
     private String      ebDate;                 //（进出口）（交出或收到）电子单据日期    -------------------
     private String      bankNoticeBillTime;     // 银行通知来单日期                    |                 ｜
@@ -25,11 +26,11 @@ public class Stage {
     private String      billToCustomsDate;      // 单据给大同海关日期                  --------------------
 
     private String      cdSN;	                //（进出口）报关单号
-    private String      cdPdf;	                //（进出口）报关单电子版
+    private String      cdPdf;	                //（进出口）报关单电子版(上传)
     private String      cdTime;	                //（进出口）报关申报日期
     private BigDecimal  cdPrice; 	            //（进出口）报关金额
     private String      portDate;	            //（进出口）日期
-    private String      port;                   // 进出口）口岸
+    private String      port;                   // (进出口）口岸
 
     private String      getDocPdf;	            //提单
     private String      invoicePdf;	            //发票
@@ -38,16 +39,16 @@ public class Stage {
 
     private String      taxDate;	            //（进出口）缴税日期
     private BigDecimal  tariffs;	            //关税
-    private String      tariffsPdf;	            //关税电子版
+    private String      tariffsPdf;	            //关税电子版     (上传)
     private BigDecimal  vat;	                //增值税
-    private String      vatPdf;	                //增值税电子版
+    private String      vatPdf;	                //增值税电子版    (上传)
     private BigDecimal  specialTariff;	        //特别关税
-    private String      specialTariffPdf;	    //特别关税电子版
+    private String      specialTariffPdf;	    //特别关税电子版   (上传)
     private BigDecimal  paytax;	                //补税
     private BigDecimal  lateFee;	            //滞报金
 
     private String      inspectionSN;	        //报检编号
-    private String      inspectionPdf;	        //报检电子版
+    private String      inspectionPdf;	        //报检电子版         (上传)
     private String      inspectionTime;	        //（进出口）报检日期
     private String      passTime;	            //（进出口）放行日期
     private String      containerCheckTime;	    //集装箱检日期
@@ -476,3 +477,5 @@ public class Stage {
         this.getFHtime = getFHtime;
     }
 }
+
+

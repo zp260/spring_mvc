@@ -23,8 +23,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
 
     @Override
     public void insert(Stage stage){
-
-        String sql = "INSERT INTO stage (conSN,stageNum,goodsArriveCoalDate) VALUES (?,?,?)";
         String sqlstr= setInsertSql(stage,"stage","id");
         System.out.println(sqlstr);
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -100,9 +98,111 @@ public class StageDaoImpl extends BaseController implements StageDao {
     @Override
     public void update(Stage stage){
 
-        String sql = "UPDATE stage SET conSN=?,stageNum=?,goodsArriveCoalDate=? WHERE id= ?";
+        String sql = "UPDATE stage SET conSN=?," +
+                "        stageNum=?," +
+                "        goodsArriveCoalDate=?," +
+                "        goodsSendETime=?," +
+                "        goodsSendATime=?," +
+                "        goodsArriveETime=?," +
+                "        goodsArriveATime=?," +
+                "        ebDate=?," +
+                "        bankNoticeBillTime=?," +
+                "        billTime=?," +
+                "        billToCustomsDate=?," +
+                "        cdSN=?," +
+                "        cdPdf=?," +
+                "        cdTime=?," +
+                "        cdPrice=?," +
+                "        portDate=?," +
+                "        port=?," +
+                "        getDocPdf=?," +
+                "        invoicePdf=?," +
+                "        coPdf=?," +
+                "        boxDocPdf=?," +
+                "        taxDate=?," +
+                "        tariffs=?," +
+                "        tariffsPdf=?," +
+                "        vat=?," +
+                "        vatPdf=?," +
+                "        specialTariff=?," +
+                "        specialTariffPdf=?," +
+                "        paytax=?," +
+                "        lateFee=?," +
+                "        inspectionSN=?," +
+                "        inspectionPdf=?," +
+                "        inspectionTime=?," +
+                "        passTime=?," +
+                "        containerCheckTime=?," +
+                "        inspectionCharges=?," +
+                "        fumigationCharges=?," +
+                "        openContainerTime=?," +
+                "        openContainerResoult=?," +
+                "        fhApproveBillTime=?," +
+                "        fhReason=?," +
+                "        fhPrice=?," +
+                "        fhMoneySeed=?," +
+                "        fhMoneyExchange=?," +
+                "        fhRMBprice=?," +
+                "        fhRMBexchange=?," +
+                "        fhDollarPrice=?," +
+                "        fhDollarExchange=?," +
+                "        bankFHtime=?," +
+                "        getFHtime=?" +
+                "        WHERE id= ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{stage.getConSN(),stage.getStageNum(),Str2Date(stage.getGoodsArriveCoalDate()),stage.getId()});
+        jdbcTemplate.update(sql,new Object[]{
+                stage.getConSN(),
+                stage.getStageNum(),
+                stage.getGoodsArriveCoalDate(),
+                stage.getGoodsSendETime(),
+                stage.getGoodsSendATime(),
+                stage.getGoodsArriveETime(),
+                stage.getGoodsArriveATime(),
+                stage.getEbDate(),
+                stage.getBankNoticeBillTime(),
+                stage.getBillTime(),
+                stage.getBillToCustomsDate(),
+                stage.getCdSN(),
+                stage.getCdPdf(),
+                stage.getCdTime(),
+                stage.getCdPrice(),
+                stage.getPortDate(),
+                stage.getPort(),
+                stage.getGetDocPdf(),
+                stage.getInvoicePdf(),
+                stage.getCoPdf(),
+                stage.getBoxDocPdf(),
+                stage.getTaxDate(),
+                stage.getTariffs(),
+                stage.getTariffsPdf(),
+                stage.getVat(),
+                stage.getVatPdf(),
+                stage.getSpecialTariff(),
+                stage.getSpecialTariffPdf(),
+                stage.getPaytax(),
+                stage.getLateFee(),
+                stage.getInspectionSN(),
+                stage.getInspectionPdf(),
+                stage.getInspectionTime(),
+                stage.getPassTime(),
+                stage.getContainerCheckTime(),
+                stage.getInspectionCharges(),
+                stage.getFumigationCharges(),
+                stage.getOpenContainerTime(),
+                stage.getOpenContainerResoult(),
+                stage.getFhApproveBillTime(),
+                stage.getFhReason(),
+                stage.getFhPrice(),
+                stage.getFhMoneySeed(),
+                stage.getFhMoneyExchange(),
+                stage.getFhRMBprice(),
+                stage.getFhRMBexchange(),
+                stage.getFhDollarPrice(),
+                stage.getFhDollarExchange(),
+                stage.getBankFHtime(),
+                stage.getGetFHtime(),
+                stage.getId()
+        });
 
     }
     @Override
