@@ -23,7 +23,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
     @RequestMapping("/user/reg")
     public ModelAndView regUser(@ModelAttribute User user){
 

@@ -1,87 +1,77 @@
 package com.wt.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 /**
- * Created by mrz on 16/8/9.
+ * Created by mrz on 16/8/12.
  */
-
+@Controller
 public class UploadController {
-    public static final String  SERVER="101.200.1.246";
-    public static final int PORT=21;
-    public static final String LOGINNAME="mrz";
-    public static final String PASSWORD="vmvnv1v2";
-    /**
-     * 上传文件
-     *
-     * @param fileName 文件名称
-     * @param plainFilePath 明文文件路径路径
-     * @param filepath 文件路径
-     * @return
-     * @throws Exception
-     */
-    public static String fileUploadByFtp(String plainFilePath,String fileName,String filepath)throws Exception{
+    @ResponseBody
+    @RequestMapping(value ="/fileupload",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView fileupload(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        FileInputStream fis = null;
-        ByteArrayOutputStream bos =null;
-        FTPClient ftpClient =new FTPClient();
-        String bl="false";
+        String fileName = file.getOriginalFilename();
+        Map<String,Object> map = new HashMap<String, Object>();
 
-        try {
-            fis = new FileInputStream(plainFilePath);
-            bos = new ByteArrayOutputStream(fis.available());
-            byte[] buffer = new byte[1024];
-            int count = 0;
+        //判断文件类型
+        if (checkFile(fileName)){
 
-            while ((count = fis.read(buffer))!=-1){
-                bos.write(buffer,0,count);
-            }
-            bos.flush();
+            //判断文件大小
+            if((file.getSize()/1024)>102400){
+                System.out.println("文件大于100M");
+                map.put("success",false);
+                map.put("error","文件大于100M");
+            }else {
+                map.put("success",true);
+                //上传开始时间
+                long  startTime=System.currentTimeMillis();
 
-            ftpClient.connect(SERVER,PORT);
-            ftpClient.login(LOGINNAME,PASSWORD);
-            FTPFile[] fs;
-            fs = ftpClient.listFiles();
-            for (FTPFile ff : fs){
-                if ( (ff.getName().equals(filepath))){
-                    bl = "true";
-                    ftpClient.changeWorkingDirectory("/"+filepath);
-                }
+                String webPath = "/upload/"+fileName; //网站的相对路径
+                String filePath = request.getSession().getServletContext().getRealPath("/upload/");
+                String uploadPath = filePath+fileName; //服务器上存储的绝对路径
+                File newFile = new File(uploadPath);  //写入服务器文件
+
+                //写入上传文件
+                file.transferTo(newFile);
+                map.put("path",webPath);
+                //上传结束时间
+                long  endTime=System.currentTimeMillis();
+                System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
             }
 
-            if ("false".equals(bl)){
-                System.out.println("文件路径不存在:"+"/"+filepath);
-                return bl;
-            }
-            ftpClient.setBufferSize(1024);
-            ftpClient.setControlEncoding("GBK");
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            ftpClient.storeFile(fileName,fis);
-            System.out.println("上传文件成功:"+fileName+"文件保存路径:"+"/" +filepath+"/");
-            return bl;
-        }catch (Exception e){
-            throw e;
-        }finally {
-            if (fis!=null){
-                try {
-                    fis.close();
-                }catch (Exception e){
-                    System.out.println(e.getLocalizedMessage()+"E:"+e);
-                }
-            }
-
-            if (bos!=null){
-                try {
-                    bos.close();
-                } catch (Exception e) {
-                    System.out.println(e.getLocalizedMessage()+"E:"+e);
-                }
-            }
+        }else {
+            map.put("success",false);
+            map.put("error","上传文件类型不对");
         }
+
+
+        return new ModelAndView(new MappingJackson2JsonView(),map);
+    }
+
+    //判断上传文件的类型
+    private  boolean checkFile(String fileName){
+        boolean flag=false;
+        String suffixList="xls,xlsx,jpg,gif,png,ico,bmp,jpeg,pdf,doc";
+        //获取文件后缀
+        String suffix=fileName.substring(fileName.lastIndexOf(".")+1, fileName.length());
+
+        if(suffixList.contains(suffix.trim().toLowerCase())){
+            flag=true;
+        }
+        return flag;
     }
 }
