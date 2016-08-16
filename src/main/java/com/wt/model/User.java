@@ -1,9 +1,11 @@
 package com.wt.model;
 
+import java.io.Serializable;
+
 /**
  * Created by mrz on 16/7/1.
  */
-public class User {
+public class User implements Serializable{
 
     private int id;
 
@@ -11,9 +13,17 @@ public class User {
 
     private String loginName;
 
-    private String password;
+    private String passWord;
 
     private String userPower;
+
+    /**
+     * 权限字段
+     * 每一位表示一种权限
+     */
+    private String rightContent="00000000000100";//初始权限智能看合同
+
+    private static final long serialVersionUID = 8538631258084019523L;
 
     public String getUserName(){
         return userName;
@@ -29,11 +39,11 @@ public class User {
         this.loginName = loginName;
     }
 
-    public String getPassword(){
-        return password;
+    public String getPassWord(){
+        return passWord;
     }
-    public void setPassword(String password){
-        this.password = password;
+    public void setPassWord(String passWord){
+        this.passWord = passWord;
     }
 
     public String getUserPower(){
@@ -48,5 +58,13 @@ public class User {
     }
 
     public void setId(int userId){this.id = userId;}
+
+    public String getRightContent() {
+        return rightContent;
+    }
+
+    public void setRightContent(String rightContent) {
+        this.rightContent = rightContent;
+    }
 
 }

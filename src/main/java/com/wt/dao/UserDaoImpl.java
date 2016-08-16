@@ -20,7 +20,7 @@ public class UserDaoImpl implements UserDao {
     public void insertData(User user){
         String sql="INSERT INTO users "+"(username,loginname,password,userpower) VALUES (?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),user.getPassword(),user.getUserPower()});
+        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),user.getPassWord(),user.getUserPower()});
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "UPDATE users set username=?,loginname=?,password=?,userpower=? where id=?";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
 
-        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),user.getPassword(),user.getUserPower(),user.getId()});
+        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),user.getPassWord(),user.getUserPower(),user.getId()});
 
     }
 

@@ -35,7 +35,7 @@
                  <form:input path="loginName" value="${map.user.loginName}"/>
              </td>
              <td>
-                 <form:input path="password" value="${map.user.password}"/>
+                 <form:input path="passWord" value="${map.user.passWord}"/>
              </td>
              <td>
                  <spring:bind path="userPower">

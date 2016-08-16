@@ -13,11 +13,11 @@ import java.sql.SQLException;
 public class UserExtractor implements ResultSetExtractor<User> {
     public User extractData(ResultSet resultSet) throws SQLException,DataAccessException{
         User user = new User();
-        user.setId(resultSet.getInt(1));
-        user.setUserName(resultSet.getString(2));
-        user.setLoginName(resultSet.getString(3));
-        user.setPassword(resultSet.getString(4));
-        user.setUserPower(resultSet.getString(5));
+        user.setId(resultSet.getInt("id"));
+        user.setUserName(resultSet.getString("userName"));
+        user.setLoginName(resultSet.getString("loginName"));
+        user.setPassWord(resultSet.getString("passWord"));
+        user.setUserPower(resultSet.getString("userPower"));
         return user;
     }
 }

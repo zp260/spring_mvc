@@ -11,14 +11,18 @@
     <title>Title</title>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js" type="text/javascript"></script>
     <script src="http://oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script>
+    <link href="/css/upload.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<form action="/fileupload" method="post" enctype="multipart/form-data" id="uploadPDF">
-    <input type="file" name="file" id="file" onchange="checkFileSize(this);"/><br>
-    <input type="text" name="uploadPath" id="uploadPath"/><br>
-    <input type="submit" value="提交">
-    <input type="button" value="JSON提交" onclick="upload($('#uploadPDF'));">
-</form>
+<div class="uploadLoyer">
+    <form action="/fileupload" method="post" enctype="multipart/form-data" id="uploadPDF">
+        <input type="file" name="file" id="file" onchange="checkFileSize(this);"/><br>
+        <input type="text" name="uploadPath" id="uploadPath"/><br>
+        <input type="submit" value="提交">
+        <input type="button" value="JSON提交" onclick="upload($('#uploadPDF'));">
+    </form>
+</div>
+
 <script type="text/javascript">
     var fileOK=false;
     //参数obj为input file对象

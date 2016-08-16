@@ -20,7 +20,7 @@ import java.text.ParseException;
 /**
  * Created by mrz on 16/7/20.
  */
-@Controller
+
 public class BaseController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {

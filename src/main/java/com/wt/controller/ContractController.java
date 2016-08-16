@@ -1,5 +1,7 @@
 package com.wt.controller;
 
+import com.wt.auth.AuthorityType;
+import com.wt.auth.FireAuthority;
 import com.wt.model.Contract;
 import com.wt.model.Stage;
 import com.wt.services.ContractService;
@@ -25,6 +27,7 @@ public class ContractController extends BaseController {
     @Autowired
     ContractService contractService;
 
+    @FireAuthority(authorityTypes = AuthorityType.Contract_CREATE)
     @RequestMapping("/conbase/add")
     public String addCon(@ModelAttribute Contract contract){
 
@@ -39,7 +42,7 @@ public class ContractController extends BaseController {
         }
         return "redirect:/conbase/list";
     }
-
+    @FireAuthority(authorityTypes = AuthorityType.Contract_FIND)
     @RequestMapping("/conbase/list")
     public ModelAndView conList(){
         List<Contract> conList = contractService.ContractList();
