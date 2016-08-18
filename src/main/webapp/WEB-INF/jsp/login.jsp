@@ -19,10 +19,11 @@
 
 <div id="login-box">
 
-    <h3>登陆界面</h3>
-
     <form:form name='loginForm' action="/logincheck" method='POST' modelAttribute="user">
 
+        <c:if test="${not empty error}">
+            <H1>${error}</H1>
+        </c:if>
         <table>
             <tr>
                 <td>登陆名:</td>
@@ -38,9 +39,6 @@
             </tr>
 
         </table>
-
-        <input type="hidden" name="${_csrf.parameterName}"
-               value="${_csrf.token}" />
 
     </form:form>
 

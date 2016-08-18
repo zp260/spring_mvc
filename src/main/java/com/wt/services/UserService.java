@@ -11,7 +11,10 @@ public interface UserService {
     public void insertData(User user);
     public List<User> getUserList();
     public void deleteData(int id);
-    public User getUser(String username);
+    public User getUserByName(String username);
+    public User getUserByLoginName(String loginName);
     public User getUserById(int id);
     public  void updateData(User user);
+    public Boolean checkUserPass(User user);
+    public Boolean checkUserExist(User user);
 }

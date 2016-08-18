@@ -2,6 +2,7 @@ package com.wt.services;
 
 import com.wt.dao.UserDao;
 import com.wt.model.User;
+import com.wt.tools.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -29,14 +30,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String username){
-        return userDao.getUser(username);
+    public User getUserByName(String username){
+        return userDao.getUserByName(username);
     }
+    public User getUserByLoginName(String loginName){return userDao.getUserByLoginName(loginName);}
     @Override
     public User getUserById(int id){return  userDao.getUserById(id);}
 
     @Override
     public void updateData(User user){
         userDao.updateData(user);
+    }
+
+    @Override
+    public Boolean checkUserPass(User user){
+        return  userDao.checkUserPass(user);
+    }
+    @Override
+    public Boolean checkUserExist(User user){
+        if (getUserByLoginName(user.getLoginName())!=null){ //登录名唯一，不返回空代表已存在登录名相关账户
+            return false;
+        }
+        return true; //可以插入新账户
     }
 }

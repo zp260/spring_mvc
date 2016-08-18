@@ -18,6 +18,7 @@ public class UserExtractor implements ResultSetExtractor<User> {
         user.setLoginName(resultSet.getString("loginName"));
         user.setPassWord(resultSet.getString("passWord"));
         user.setUserPower(resultSet.getString("userPower"));
+        user.setRightContent(resultSet.getString("rightContent"));
         return user;
     }
 }

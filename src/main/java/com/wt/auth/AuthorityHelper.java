@@ -14,11 +14,12 @@ public class AuthorityHelper {
 
     /**
      * 判断是否有权限
-     * @param akey
-     * @param session
+     * @param akey 权限位置
+     * @param session 取得的用户SEESION存储的权限
      * @return
      */
     public static boolean hasAuthority(int akey, String session){
+
         if(session==null || "".equals(session)){
             return false;
         }

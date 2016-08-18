@@ -2,6 +2,7 @@ package com.wt.controller;
 
 import com.wt.auth.AuthorityHelper;
 import com.wt.auth.AuthorityType;
+import com.wt.auth.FireAuthority;
 import com.wt.model.User;
 import com.wt.services.UserService;
 import com.wt.tools.MD5Util;
@@ -24,11 +25,11 @@ public class UserController {
     UserService userService;
 
 
-    @RequestMapping("/user/reg")
+    @RequestMapping(value = {"/user/reg","user/add"})
     public ModelAndView regUser(@ModelAttribute User user){
 
         //预置角色列表
-        List<String> powerName = new ArrayList<String>();
+        Map<Integer,Object> powerName = new HashMap<Integer, Object>();
         //权限列表
         Map<Integer,String> powerList = new HashMap<Integer, String>();
 //        获取枚举权限枚举，写入权限列表
@@ -37,12 +38,12 @@ public class UserController {
             System.out.println(authorityType.getName()+authorityType.getIndex());
             powerList.put(authorityType.getIndex(),authorityType.getName());
         }
-        powerName.add("查询员");
-        powerName.add("录入员");
-        powerName.add("审核员");
-        powerName.add("管理员");
-        powerName.add("总经理");
-        powerName.add("会计");
+        powerName.put(1,"查询员");
+        powerName.put(2,"录入员");
+        powerName.put(3,"审核员");
+        powerName.put(4,"管理员");
+        powerName.put(5,"总经理");
+        powerName.put(6,"会计");
 
 
 
@@ -60,14 +61,19 @@ public class UserController {
         return  new ModelAndView("/user/list","userlist",userList);
     }
 
+    @FireAuthority(authorityTypes = AuthorityType.USER_INSTERT)
     @RequestMapping("/user/insert")
     public String inserData(@ModelAttribute User user){
         if (user !=null){
+            if (userService.checkUserExist(user)){
 
-            user.setPassWord(MD5Util.encode(user.getPassWord()));
-            user.setRightContent(AuthorityHelper.makeAuthority(user.getUserPower()));
-            user.setUserPower(AuthorityHelper.makeAuthority(user.getUserPower()));
-            userService.insertData(user);
+                user.setRightContent(AuthorityHelper.makeAuthority(user.getRightContent()));
+                userService.insertData(user);
+                //提示新增账户成功
+            }else{
+                //提示账户已存在
+            }
+
         }
         return "redirect:/user/list";
     }

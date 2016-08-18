@@ -27,7 +27,6 @@ public class AuthorityAnnotationInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         HandlerMethod handler2=(HandlerMethod) handler;
         FireAuthority fireAuthority = handler2.getMethodAnnotation(FireAuthority.class);
 
@@ -41,6 +40,10 @@ public class AuthorityAnnotationInterceptor extends HandlerInterceptorAdapter {
 
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute(SessionHelper.UserHandler); //通过SEESION 取登陆后的USER
+        if (null==user){
+            response.sendRedirect("/index?error=error");
+            return false;
+        }
         boolean aflag = false;
 
         for(AuthorityType at:fireAuthority.authorityTypes()){

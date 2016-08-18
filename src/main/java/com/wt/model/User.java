@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 public class User implements Serializable{
 
+    /**
+     * userPower  用户角色
+     *
+     */
     private int id;
 
     private String userName;
@@ -17,11 +21,12 @@ public class User implements Serializable{
 
     private String userPower;
 
+
     /**
      * 权限字段
      * 每一位表示一种权限
      */
-    private String rightContent="00000000000100";//初始权限智能看合同
+    private String rightContent;//权限位
 
     private static final long serialVersionUID = 8538631258084019523L;
 
