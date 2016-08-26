@@ -54,12 +54,13 @@
   </listener>
 <!--end-->
 
+
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring-security.xml,/WEB-INF/spring-database.xml</param-value>
+    <param-value>/WEB-INF/spring-security.xml,/WEB-INF/c3p0.xml</param-value>
   </context-param>
 
   <!-- Spring Security -->

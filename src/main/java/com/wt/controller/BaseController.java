@@ -48,7 +48,13 @@ public class BaseController {
       }
         return date;
     }
-//通过对象 和 RESULTSET 设置 对象的每个属性的SET 方法
+
+    /**
+     * 通过对象 和 RESULTSET 设置 对象的每个属性的SET 方法
+     * @param object 对象BEAN
+     * @param resultset 数据库查询结果
+     * @throws Exception
+     */
     public void getMethodInfo (Object object,ResultSet resultset) throws Exception{
         Class classType = object.getClass();
         Method[] methods =classType.getDeclaredMethods();
@@ -158,7 +164,7 @@ public class BaseController {
             if (fieldName != extProperty){
 
                 try {
-                    objects[j] = fieldMethod.invoke(object,null);
+                    objects[j] = fieldMethod.invoke(object,new Object[]{});
                     j++;
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -198,19 +204,19 @@ public class BaseController {
 
                 switch (fieldClass.getName()){
                     case "java.lang.String":
-                        String value =  (String)fieldMethod.invoke(object,null);
+                        String value =  (String)fieldMethod.invoke(object,new Object[]{});
                         list.add(value);
                         break;
                     case "java.math.BigDecimal":
-                        BigDecimal decimalValue = (BigDecimal)fieldMethod.invoke(object,null);
+                        BigDecimal decimalValue = (BigDecimal)fieldMethod.invoke(object,new Object[]{});
                         list.add(decimalValue);
                         break;
                     case "int":
-                        Integer intValue =  (Integer)fieldMethod.invoke(object,null);
+                        Integer intValue =  (Integer)fieldMethod.invoke(object,new Object[]{});
                         list.add(intValue);
                         break;
                     case "java.lang.Boolean":
-                        Boolean boolValue = (Boolean) fieldMethod.invoke(object,null);
+                        Boolean boolValue = (Boolean) fieldMethod.invoke(object,new Object[]{});
                         list.add(boolValue);
                         break;
                 }

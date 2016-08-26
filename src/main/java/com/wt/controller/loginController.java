@@ -57,5 +57,9 @@ public class LoginController {
         return model;
     }
 
+    @RequestMapping("/head")
+    public String head(){
+        return "/head";
+    }
 
 }

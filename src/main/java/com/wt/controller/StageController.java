@@ -55,8 +55,5 @@ public class StageController extends BaseController {
        Stage stage1 = stageService.getStageById(id);
         return new ModelAndView("/stage/edit","stage",stage1);
     }
-    @RequestMapping("/stage/upload")
-    public String upload(){
-        return "/stage/upload";
-    }
+
 }

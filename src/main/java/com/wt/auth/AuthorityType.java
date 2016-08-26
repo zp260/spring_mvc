@@ -30,6 +30,8 @@ public enum AuthorityType {
     Contract_FIND("查看合同", 11),//查询员，录入员，审核员
     Contract_MODIFY("修改合同", 12),//录入员
     Contract_DELETE("删除合同", 13),//总经理
+
+    UPLOAD("文件上传",14)
     ;
     private String name;
     private int index;

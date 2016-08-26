@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     public void insertData(User user){
         String sql="INSERT INTO users "+"(username,loginname,password,userpower,rightcontent) VALUES (?,?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),MD5Util.encode(user.getPassWord()),user.getUserPower(),user.getRightContent()});
+        jdbcTemplate.update(sql,new Object[]{user.getUserName().replaceAll("\\s*", ""),user.getLoginName().replaceAll("\\s*", ""),MD5Util.encode(user.getPassWord().replaceAll("\\s*", "")),user.getUserPower(),user.getRightContent()});
     }
 
     @Override
@@ -40,13 +40,18 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate.update(sql);
     }
     @Override
-    public void updateData(User user){
-        String sql = "UPDATE users set username=?,loginname=?,password=?,userpower=?,rightContent=? where id=?";
+    public void updateInfo(User user){
+        String sql = "UPDATE users set username=?,userpower=?,rightContent=? where id=?";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql,new Object[]{user.getUserName(),user.getLoginName(),MD5Util.encode(user.getPassWord()),user.getUserPower(),user.getRightContent(),user.getId()});
-
+        jdbcTemplate.update(sql,new Object[]{user.getUserName().replaceAll("\\s*", ""),user.getUserPower(),user.getRightContent(),user.getId()});
     }
 
+    @Override
+    public void updatePass(User user){
+        String sql = "UPDATE users set password=? where id=?";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        jdbcTemplate.update(sql,new Object[]{MD5Util.encode(user.getPassWord()),user.getId()});
+    }
     @Override
     public User getUserByName(String userName) throws IndexOutOfBoundsException{
         List<User> userList = new ArrayList<User>();

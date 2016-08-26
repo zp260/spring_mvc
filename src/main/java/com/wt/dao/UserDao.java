@@ -14,6 +14,7 @@ public interface UserDao {
     public User getUserByName(String userName);
     public User getUserById(int id);
     public User getUserByLoginName(String loginName);
-    public void updateData(User user);
+    public void updateInfo(User user); //更新用户资料，姓名、橘色、权限
+    public void updatePass(User user);
     public Boolean checkUserPass(User user);//验证用户名密码
 }

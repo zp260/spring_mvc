@@ -1,5 +1,7 @@
 package com.wt.auth;
 
+import java.util.ArrayList;
+
 /**
  * Created by mrz on 16/8/15.
  */
@@ -8,9 +10,9 @@ public class AuthorityHelper {
     /**
      * 250个0
      */
-    final public static String _RAW = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    final public static String _RAW = "00000000000000";
 
-    final public static String _RAW_ON = "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+    final public static String _RAW_ON = "11111111111111";
 
     /**
      * 判断是否有权限
@@ -47,10 +49,30 @@ public class AuthorityHelper {
             int ak = Integer.parseInt(akey);
             sb.setCharAt(ak, '1');
         }
-
         return sb.toString();
     }
 
+    /**
+     * 拆分权限字符串，给前台输出数组
+     * @param powerKey 权限字符串
+     * @return 前台JS用的权限数组，如[1,2,3,,4]
+     */
+    public static String getAuthority(String powerKey){
+        String[] keys = powerKey.split("");
+        String makeKey = new String();
+        for (AuthorityType authorityType : AuthorityType.values()){
+            int ak =Integer.parseInt(keys[authorityType.getIndex()]);
+            if (ak != 0){
+                if (authorityType.getIndex()!=13){
+                    makeKey += authorityType.getIndex()+",";
+                }else{
+                    makeKey += authorityType.getIndex();
+                }
+            }
+
+        }
+        return "["+makeKey+"]";
+    }
 
 
 }

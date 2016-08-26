@@ -38,9 +38,10 @@ public class UserServiceImpl implements UserService {
     public User getUserById(int id){return  userDao.getUserById(id);}
 
     @Override
-    public void updateData(User user){
-        userDao.updateData(user);
+    public void updateInfo(User user){
+        userDao.updateInfo(user);
     }
+    public void updatePass(User user){ userDao.updatePass(user);}
 
     @Override
     public Boolean checkUserPass(User user){

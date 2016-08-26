@@ -14,7 +14,8 @@ public interface UserService {
     public User getUserByName(String username);
     public User getUserByLoginName(String loginName);
     public User getUserById(int id);
-    public  void updateData(User user);
+    public  void updateInfo(User user);
+    public void updatePass(User user);
     public Boolean checkUserPass(User user);
     public Boolean checkUserExist(User user);
 }

@@ -52,14 +52,15 @@
 
     <!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 --><!-- Configures the @Controller programming model -->
     <mvc:annotation-driven/>
+    <mvc:interceptors>
+        <bean class="com.wt.interceptor.AuthorityAnnotationInterceptor"/>
+    </mvc:interceptors>
 
     <mvc:resources location="/images/" mapping="/images/**"/>
     <mvc:resources location="/css/" mapping="/css/**"/>
     <mvc:resources location="/js/" mapping="/js/**"/>
     <mvc:resources location="/upload/" mapping="/upload/**"/>
 
-    <mvc:interceptors>
-        <bean class="com.wt.interceptor.AuthorityAnnotationInterceptor"/>
-    </mvc:interceptors>
+
 
 </beans>
