@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>大同煤矿集团外经贸有限责任公司</title>
+
+    <!--引用CSS-->
+    <link type="text/css" rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
+    <!--引用JS-->
+    <script type="text/javascript" src="/js/jquery.min8.js"></script>
+    <script type="text/javascript" src="/js/Time.js"></script>
+
+</head>
+<body scroll="no" style="overflow:hidden" >
+<div id="top">
+    <div class="logo fl"></div>
+    <div class="date fr">
+        <p><i class="fa fa-bell-o"></i> 今天是<i id="timespan" onload="time();"></i></p>
+        <p>欢迎 <span>朱平</span> 登录大同煤矿集团进出口管理系统<a href=""><i class="fa fa-sign-in"></i> 退出系统</a></p>
+    </div>
+</div>
+<div id="left">
+    <a target="page" href="use.html" class="left_a nav"><i class="left_i fa fa-user"></i>
+        <p class="left_p">使用单位</p></a>
+    <a class="left_b nav_a">
+        <i class="left_i fa fa-file-text"></i>
+        <p class="left_p">进口合同</p>
+    </a>
+    <ul>
+        <li class="left_li"><a target="page" href="/conbase/add"><p>合同录入</p></a></li>
+        <li class="left_li"><a target="page" href="review.html"><p>合同审核</p></a></li>
+        <li class="left_li"><a target="page" href="inquiry.html"><p>合同查询</p></a></li>
+    </ul>
+    <a target="page" href="goods.html" class="left_a"><i class="left_i fa fa-pie-chart"></i>
+        <p class="left_p">货物</p></a>
+    <a target="page" href="supplier.html" class="left_a"><i class="left_i fa fa-truck"></i>
+        <p class="left_p">供货商</p></a>
+    <a target="page" href="payment.html" class="left_a"><i class="left_i fa fa-pie-chart"></i>
+        <p class="left_p">付汇</p></a>
+    <a target="page" href="declare.html" class="left_a"><i class="left_i fa fa-floppy-o"></i>
+        <p class="left_p">报关</p></a>
+    <a target="page" href="custom.html" class="left_a"><i class="left_i fa fa-search"></i>
+        <p class="left_p">自定义查询</p></a>
+    <a class="left_b nav_a">
+        <i class="left_i fa fa-cog"></i>
+        <p class="left_p">系统管理</p></a>
+    <ul>
+        <li class="left_li"><a target="page" href="user.html"><p>用户管理</p></a></li>
+        <li class="left_li"><a target="page" href="money.html"><p>货币管理</p></a></li>
+        <li class="left_li"><a target="page" href="port.html"><p>进口口岸管理</p></a></li>
+        <li class="left_li"><a target="page" href="supplierman.html"><p>供应商管理</p></a></li>
+    </ul>
+
+</div>
+<!--iFrame链接-->
+<script type="text/javascript" language="javascript">
+    function iFrames() {
+        var ifm = document.getElementsByName("page");
+        var subWeb = document.frames ? document.frames["page"].document :
+                ifm.contentDocument;
+        if (ifm != null && subWeb != null) {
+            ifm.height = subWeb.body.scrollHeight;
+        }
+    }
+</script>
+
+<div id="mainc" style="height:100%;">
+     <iframe id="win1" name="page" src="" onload="iFrames()" frameborder="0"></iframe>
+</div>
+
+<!--导航特效-->
+<script type="text/javascript">
+    $(function () {
+        $(".left_a").click(function () {
+            $(this).addClass('ntv').siblings('a').removeClass('ntv');
+        });
+    });
+</script>
+
+<!--导航申缩-->
+<script>
+    $(document).ready(function(){
+        $("ul").hide();
+        $(".nav_a").click(function(){
+            $(this).addClass("nav_b").next("ul").slideToggle(300).siblings("ul").slideUp("slow");
+            $(this).siblings().removeClass("nav_b");
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $(".left_li p").click(function () {
+            $(this).addClass('nna').siblings('p').removeClass('nav');
+        });
+    });
+</script>
+
+<!--首页调用日期-->
+<script type="text/javascript">
+    $("#timespan").text(time());
+</script>
+
+</body>
+
+</html>

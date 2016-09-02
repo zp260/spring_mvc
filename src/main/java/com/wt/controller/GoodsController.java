@@ -1,5 +1,7 @@
 package com.wt.controller;
 
+import com.wt.controller.util.CallbackMap;
+import com.wt.controller.util.UserPowerMap;
 import com.wt.model.Goods;
 import com.wt.services.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +25,24 @@ public class GoodsController {
     @Autowired
     GoodsService goodsService;
 
-    @RequestMapping("/goods/insert")
-    public void insertGood(@ModelAttribute Goods goods){
-        if (goods !=null){
-            goodsService.insertGoods(goods);
-        }
+    @ResponseBody
+    @RequestMapping(value = "/goods/insert",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView insertGood(@ModelAttribute Goods goods){
+        Map<String,Object> map =new HashMap<String, Object>();
+        if (goods.getConSN().equals("")){ //这里还要加个判断 CONSN 和 STAGENUM
+            if (goods.getStageNum()<0){
+                map = new CallbackMap("设备增加失败",false,"批次号不正确").getCallBackMap();
+            }
+            else {
+                map = new CallbackMap("设备增加失败",false,"合同号不正确").getCallBackMap();
+            }
 
+        }else{
+            goodsService.insertGoods(goods);
+            map = new CallbackMap("设备增加成功",true,null).getCallBackMap();
+
+        }
+        return  new ModelAndView(new MappingJackson2JsonView(),map);
     }
 
     @RequestMapping("/goods/add")

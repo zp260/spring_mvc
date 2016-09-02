@@ -12,5 +12,7 @@ public interface StageService {
     public void delete(int id);
     public void update(Stage stage);
     public List<Stage> getStageList();
+    public List<Stage> getStageListByConSN(String conSN);
     public Stage getStageById(int id);
+    public int getStageNumByContract(String contractSN);
 }

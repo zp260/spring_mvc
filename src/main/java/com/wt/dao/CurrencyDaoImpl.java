@@ -33,6 +33,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         jdbcTemplate.update(sql);
 
     }
+    @Override
     public void update(Currency money){
         String sql = "UPDATE currency SET moneyName=? WHERE id=?";
         JdbcTemplate jdbcTemplate =new JdbcTemplate(dataSource);
@@ -41,6 +42,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
                 money.getId()
         });
     }
+    @Override
     public List<Currency> list(){
         List<Currency> list = new ArrayList<Currency>();
         String sql = "SELECT * FROM currency";
@@ -56,6 +58,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         return list.get(0);
 
     }
+    @Override
     public Currency getMoneyById(int id){
         List<Currency> list = new ArrayList<Currency>();
         String sql = "SELECT * FROM currency WHERE id =" + id;

@@ -14,4 +14,5 @@ public class CurrencyRowMapper implements RowMapper<Currency> {
       CurrencyExtrator moneyExtrator = new CurrencyExtrator();
      return moneyExtrator.extractData(resultSet);
     }
+
 }

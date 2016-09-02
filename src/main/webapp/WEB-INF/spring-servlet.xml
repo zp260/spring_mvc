@@ -41,8 +41,6 @@
 
     <bean id="UserDao" class="com.wt.dao.UserDaoImpl"/>
     <bean id="UserService" class="com.wt.services.UserServiceImpl"/>
-    <!--<bean id="PortDao" class="com.wt.dao.PortDaoImpl"/>-->
-    <!--<bean id="PortService" class="com.wt.services.PortServiceImpl"/>-->
     <bean id="ContractDao" class="com.wt.dao.ContractDaoImpl"/>
     <bean id="ContractService" class="com.wt.services.ContractServiceImpl"/>
     <bean id="StageDao" class="com.wt.dao.StageDaoImpl"/>
@@ -60,6 +58,7 @@
     <mvc:resources location="/css/" mapping="/css/**"/>
     <mvc:resources location="/js/" mapping="/js/**"/>
     <mvc:resources location="/upload/" mapping="/upload/**"/>
+    <mvc:resources location="/" mapping="/*.html"/>
 
 
 

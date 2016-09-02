@@ -19,11 +19,11 @@ public class GoodsDaoImpl extends BaseController implements GoodsDao {
 
     @Override
     public void insertGoods(Goods goods){
-        String sql = setInsertSql(goods,"goods","goodsId");
+        String sql = "INSERT INTO goods (conSN,stageNum,goodsName,goodsPrice,goodsModel,goodsCount) VALUES (?,?,?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
         goods.getConSN(),
-        goods.getStageId(),
+        goods.getStageNum(),
         goods.getGoodsName(),
         goods.getGoodsPrice(),
         goods.getGoodsModel(),
@@ -40,11 +40,11 @@ public class GoodsDaoImpl extends BaseController implements GoodsDao {
     }
     @Override
     public void updateGoods(Goods goods){
-        String sql = "UPDATE goods SET conSN=?,stageId=?,goodsName=?,goodsPrice=?,goodsModel=?,goodsCount=? WHERE goodsId=?";
+        String sql = "UPDATE goods SET conSN=?,stageNum=?,goodsName=?,goodsPrice=?,goodsModel=?,goodsCount=? WHERE goodsId=?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
                 goods.getConSN(),
-                goods.getStageId(),
+                goods.getStageNum(),
                 goods.getGoodsName(),
                 goods.getGoodsPrice(),
                 goods.getGoodsModel(),

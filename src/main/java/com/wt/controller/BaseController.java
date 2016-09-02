@@ -183,9 +183,6 @@ public class BaseController {
             }
 
         }
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("sql",sqlStartStr+sqlPropertyStr+sqlStartValues+sqlValues+sqlEndValues);
-        map.put("object",objects);
         return sqlStartStr+sqlPropertyStr+sqlStartValues+sqlValues+sqlEndValues;
     }
 //生成插入数据的序列对象

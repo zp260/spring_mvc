@@ -2,15 +2,19 @@ package com.wt.controller;
 
 import com.wt.auth.AuthorityType;
 import com.wt.auth.FireAuthority;
-import com.wt.model.Contract;
-import com.wt.model.Stage;
+import com.wt.controller.util.CallbackMap;
+import com.wt.model.*;
 import com.wt.services.ContractService;
+import com.wt.services.CurrencyService;
+import com.wt.services.PortService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,29 +30,62 @@ import java.util.Map;
 public class ContractController extends BaseController {
     @Autowired
     ContractService contractService;
+    @Autowired
+    CurrencyService currencyService;
+    @Autowired
+    PortService portService;
 
     @FireAuthority(authorityTypes = AuthorityType.Contract_CREATE)
     @RequestMapping("/conbase/add")
-    public String addCon(@ModelAttribute Contract contract){
-
-        return "/conbase/add";
+    public ModelAndView addCon(@ModelAttribute Contract contract, @ModelAttribute Stage stage, @ModelAttribute Goods goods){
+        ModelAndView mv = new ModelAndView();
+        List<Currency> currencyList =currencyService.list();
+        List<Port> portList = portService.getPortList();
+        mv.addObject("currencyList",currencyList);
+        mv.addObject("portList",portList);
+        mv.setViewName("/conbase/entry");
+        return mv;
     }
+    @FireAuthority(authorityTypes = AuthorityType.Contract_CREATE)
+    @ResponseBody
+    @RequestMapping(value = "/conbase/insert",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView insertCon(@ModelAttribute Contract contract){
+        Map<String,Object> map = new HashMap<String, Object>();
+        if (contract!=null && null!=contract.getConSN()){
+            if (!contractService.hasContract(contract.getConSN())){ //判断如果不存在已有合同就写入
+                contractService.insert(contract);
+                 map =  new CallbackMap("合同信息增加成功",true,null).getCallBackMap();
+            }
+            else {
+                map =  new CallbackMap("已存在此合同号的合同",false,"合同已存在").getCallBackMap();
+            }
 
-    @RequestMapping("/conbase/insert")
-    public String insertCon(@ModelAttribute Contract contract){
-
-        if (contract!=null){
-            contractService.insert(contract);
+        }else {
+            map =  new CallbackMap("合同信息输入不完整",false,"合同号未输入").getCallBackMap();
         }
-        return "redirect:/conbase/list";
+
+        return new ModelAndView (new MappingJackson2JsonView(),map);
     }
+
     @FireAuthority(authorityTypes = AuthorityType.Contract_FIND)
     @RequestMapping("/conbase/list")
-    public ModelAndView conList(){
-        List<Contract> conList = contractService.ContractList();
-        return new ModelAndView("/conbase/list","list",conList);
-    }
+    public ModelAndView conList(@RequestParam(value = "id",required = false) int id,@RequestParam(value = "conSN",required = false)String conSN){
+        Contract contract = new Contract();
+        ModelAndView mv = new ModelAndView();
+        if (id>0){
+            contract = contractService.getContractById(id);
 
+        }else if (null != conSN){
+            contract = contractService.getContractByConSN(conSN);
+        }
+        else {
+            List<Contract> conList = contractService.ContractList();
+        }
+
+        mv.addObject(contract);
+        mv.setViewName("/conbase/list");
+        return mv;
+    }
 
     @RequestMapping("/conbase/edit")
     public ModelAndView conEdit(@RequestParam int id,@ModelAttribute Contract contract){

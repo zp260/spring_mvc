@@ -30,8 +30,11 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
                 "supplier," +
                 "biddingSN," +
                 "conPrice," +
+                "monetaryUnit,"+
                 "atDoller," +
+                "dollerRate,"+
                 "atRMB," +
+                "rmbRate,"+
                 "lcSN," +
                 "lcTimeLimit," +
                 "lcFrom," +
@@ -41,7 +44,7 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
                 "lcChangeReason," +
                 "deliveryDate," +
                 "conFrom" +
-                ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
                 contract.getConSN(),
@@ -52,8 +55,11 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
                 contract.getSupplier(),
                 contract.getBiddingSN(),
                 contract.getConPrice(),
+                contract.getMonetaryUnit(),
                 contract.getAtDoller(),
+                contract.getDollerRate(),
                 contract.getAtRMB(),
+                contract.getRmbRate(),
                 contract.getLcSN(),
                 Str2Date(contract.getLcTimeLimit()),
                 contract.getLcFrom(),
@@ -85,8 +91,11 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
                 "supplier=?," +
                 "biddingSN=?," +
                 "conPrice=?," +
+                "monetaryUnit=?,"+
                 "atDoller=?," +
+                "dollerRate=?,"+
                 "atRMB=?," +
+                "rmbRate=?,"+
                 "lcSN=?," +
                 "lcTimeLimit=?," +
                 "lcFrom=?," +
@@ -107,8 +116,11 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
                 contract.getSupplier(),
                 contract.getBiddingSN(),
                 contract.getConPrice(),
+                contract.getMonetaryUnit(),
                 contract.getAtDoller(),
+                contract.getDollerRate(),
                 contract.getAtRMB(),
+                contract.getRmbRate(),
                 contract.getLcSN(),
                 Str2Date(contract.getLcTimeLimit()),
                 contract.getLcFrom(),
@@ -138,12 +150,27 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
         contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return  contractList.get(0);
     }
-
+    @Override
+    public Contract getContractByConSN(String conSN){
+        List<Contract> contractList = new ArrayList<Contract>();
+        String sql = "SELECT * from conBase WHERE conSN=?";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{conSN});
+        return  contractList.get(0);
+    }
     @Override
     public void verify(int id){
         String sql = "UPDATE conBase SET conVerify=TRUE WHERE id=?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{id});
+    }
+    //返回TRUE 说明已经有合同号了
+    @Override
+    public Boolean hasContract(String conSN){
+        String sql = "SELECT COUNT(conSN) FROM conBase WHERE conSN = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        Integer count =  jdbcTemplate.queryForObject(sql,new Object[]{conSN},Integer.class);
+        return (count>0 ? true :false);
     }
 
 }

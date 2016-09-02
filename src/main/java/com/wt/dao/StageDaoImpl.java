@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import com.wt.controller.BaseController;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 /**
  * Created by mrz on 16/7/20.
@@ -23,21 +24,51 @@ public class StageDaoImpl extends BaseController implements StageDao {
 
     @Override
     public void insert(Stage stage){
-        String sqlstr= setInsertSql(stage,"stage","id");
-        System.out.println(sqlstr);
+        String sqlstr= "INSERT INTO stage (" +
+                "conSN," +
+                "stageNum," +
+                "goodsArriveCoalDate," +
+                "goodsSendETime," +
+                "goodsSendATime," +
+                "goodsArriveETime," +
+                "goodsArriveATime," +
+                "ebDate," +
+                "bankNoticeBillTime," +
+                "billTime," +
+                "billToCustomsDate," +
+                "cdSN," +
+                "cdPdf," +
+                "cdTime," +
+                "cdPrice," +
+                "portDate," +
+                "port," +
+                "getDocPdf," +
+                "invoicePdf," +
+                "coPdf," +
+                "boxDocPdf," +
+                "taxDate," +
+                "tariffs," +
+                "tariffsPdf," +
+                "vat," +
+                "vatPdf," +
+                "specialTariff," +
+                "specialTariffPdf," +
+                "paytax," +
+                "lateFee," +
+                "inspectionSN," +
+                "inspectionPdf," +
+                "inspectionTime," +
+                "passTime," +
+                "containerCheckTime," +
+                "inspectionCharges," +
+                "fumigationCharges," +
+                "openContainerTime," +
+                "openContainerResoult," +
+                "bankFHtime," +
+                "getFHtime) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        try {
-            Object ob = setInsertObj(stage,"id");
-        } catch (IntrospectionException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        Object[] ob = new Object[50];
-
 
         jdbcTemplate.update(sqlstr,new Object[]{
                 stage.getConSN(),
@@ -79,15 +110,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
                 stage.getFumigationCharges(),
                 Str2Date(stage.getOpenContainerTime()),
                 stage.getOpenContainerResoult(),
-                Str2Date(stage.getFhApproveBillTime()),
-                stage.getFhReason(),
-                stage.getFhPrice(),
-                stage.getFhMoneySeed(),
-                stage.getFhMoneyExchange(),
-                stage.getFhRMBprice(),
-                stage.getFhRMBexchange(),
-                stage.getFhDollarPrice(),
-                stage.getFhDollarExchange(),
                 Str2Date(stage.getBankFHtime()),
                 Str2Date(stage.getGetFHtime())
         });
@@ -218,8 +240,14 @@ public class StageDaoImpl extends BaseController implements StageDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper());
         return  stageList;
-
-
+    }
+    @Override
+    public List<Stage> getStageListByConSN(String conSN){
+        List<Stage> stageList= new ArrayList<Stage>();
+        String sql = "SELECT * FROM stage WHERE conSN = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        stageList = jdbcTemplate.query(sql,new StageRowMapper(),new Object[]{conSN});
+        return  stageList;
     }
     @Override
     public Stage getStageById(int id){
@@ -229,5 +257,12 @@ public class StageDaoImpl extends BaseController implements StageDao {
         stageList = jdbcTemplate.query(sql,new StageRowMapper());
         return  stageList.get(0);
 
+    }
+    @Override
+    public int getStageNumByContract(String contractSN){
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        String sql = "SELECT COUNT(stageNum) from stage WHERE stageNum=?";
+        int count= jdbcTemplate.queryForObject(sql,new Object[]{contractSN},Integer.class);
+        return count;
     }
 }

@@ -13,6 +13,7 @@ public interface ContractDao {
     public void update(Contract contract);
     public List<Contract> ContractList();
     public Contract getContractById(int id);
-
+    public Contract getContractByConSN(String conSN);
     public void verify(int id); //审核
+    public Boolean hasContract(String conSN); //是否已经存在合同
 }

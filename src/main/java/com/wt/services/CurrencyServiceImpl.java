@@ -28,9 +28,7 @@ public class CurrencyServiceImpl implements  CurrencyService{
         currencyDao.update(money);
     }
     @Override
-    public List<Currency> list(){
-       return currencyDao.list();
-    }
+    public List<Currency> list(){return currencyDao.list();}
     @Override
     public Currency getMoneyByName(String moneyName){
         return currencyDao.getMoneyByName(moneyName);

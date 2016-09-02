@@ -45,20 +45,20 @@ function setPower(){
             makeCheckBox([11]);
             break;
         case "1":
-            var powerlist = new Array(8,10,11,12);
+            var powerlist = new Array(8,10,11,12,14);
             makeCheckBox(powerlist);
             break;
         case "2":
             makeCheckBox([9,11]);
             break;
         case "3":
-            makeCheckBox([0,1,2,3,8,9,10,11,12,13]);
+            makeCheckBox([0,1,2,3,8,9,10,11,12,13,14]);
             break;
         case "4":
             makeCheckBox([4,5,6,7,11]);
             break;
         case "5":
-            makeCheckBox([0,1,2,3,7,8,9,10,11,12,13]);
+            makeCheckBox([0,1,2,3,7,8,9,10,11,12,13,14]);
             break;
     }
 }

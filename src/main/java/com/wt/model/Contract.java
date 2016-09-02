@@ -10,23 +10,26 @@ import java.sql.Date;
 public class Contract {
     private int         id;
     private String      conSN;          //合同号
-    private String        conDate;        //合同签订时间
+    private String      conDate;        //合同签订时间
     private Boolean     isInport;       //是否是进口
     private Boolean     conVerify;      //是否审核通过
     private String      useORG;         //使用单位
-    private String      supplier;        //供货商
+    private String      supplier;       //供货商
     private String      biddingSN;      //中标通知书编码
     private BigDecimal  conPrice;       //合同金额
+    private String      monetaryUnit;   //合同金额货币单位
     private BigDecimal  atDoller;       //折美元金额
+    private BigDecimal  dollerRate;     //折美元汇率
     private BigDecimal  atRMB;          //折人民币金额
+    private BigDecimal  rmbRate;        //折人民币汇率
     private String      lcSN;           //LC编号
-    private String        lcTimeLimit;    //LC开出期限
+    private String      lcTimeLimit;    //LC开出期限
     private String      lcFrom;         //LC开出行
     private BigDecimal  lcPrice;        //lc开证金额
-    private String        lcStartDate;    //LC开出时间
-    private String        lcChangeDate;   //lc改证时间
+    private String      lcStartDate;    //LC开出时间
+    private String      lcChangeDate;   //lc改证时间
     private String      lcChangeReason; //LC改证原因
-    private String        deliveryDate;   //交货日期
+    private String      deliveryDate;   //交货日期
     private String      conFrom;        //合同来源
 
     public int getId(){ return id;}
@@ -88,5 +91,37 @@ public class Contract {
 
     public String getConFrom(){return conFrom;}
     public void setConFrom(String conFrom){this.conFrom = conFrom;}
+
+    public Boolean getInport() {
+        return isInport;
+    }
+
+    public void setInport(Boolean inport) {
+        isInport = inport;
+    }
+
+    public String getMonetaryUnit() {
+        return monetaryUnit;
+    }
+
+    public void setMonetaryUnit(String monetaryUnit) {
+        this.monetaryUnit = monetaryUnit;
+    }
+
+    public BigDecimal getDollerRate() {
+        return dollerRate;
+    }
+
+    public void setDollerRate(BigDecimal dollerRate) {
+        this.dollerRate = dollerRate;
+    }
+
+    public BigDecimal getRmbRate() {
+        return rmbRate;
+    }
+
+    public void setRmbRate(BigDecimal rmbRate) {
+        this.rmbRate = rmbRate;
+    }
 
 }

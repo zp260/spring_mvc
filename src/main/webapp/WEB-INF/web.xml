@@ -3,7 +3,7 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          xmlns:context="http://www.springframework.org/schema/context"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
   <display-name>Archetype Created Web Application</display-name>
 
@@ -72,6 +72,8 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
-
-
+ <!--SESSION超时设置-->
+  <session-config>
+    <session-timeout>120</session-timeout>
+  </session-config>
 </web-app>

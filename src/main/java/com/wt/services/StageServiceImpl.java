@@ -26,7 +26,9 @@ public class StageServiceImpl implements StageService {
     public List<Stage> getStageList(){
         return stageDao.getStageList();
     }
+    public List<Stage> getStageListByConSN(String conSN){return stageDao.getStageListByConSN(conSN);}
     public Stage getStageById(int id){
         return stageDao.getStageById(id);
     }
+    public int getStageNumByContract(String contractSN){return stageDao.getStageNumByContract(contractSN);}
 }

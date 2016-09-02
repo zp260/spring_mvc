@@ -22,8 +22,11 @@ public class ContractExtractor implements ResultSetExtractor<Contract>{
         contract.setSupplier(resultSet.getString("supplier"));
         contract.setBiddingSN(resultSet.getString("biddingSN"));
         contract.setConPrice(resultSet.getBigDecimal("conPrice"));
+        contract.setMonetaryUnit(resultSet.getString("monetaryUnit"));
         contract.setAtDoller(resultSet.getBigDecimal("atDoller"));
+        contract.setDollerRate(resultSet.getBigDecimal("dollerRate"));
         contract.setAtRMB(resultSet.getBigDecimal("atRMB"));
+        contract.setRmbRate(resultSet.getBigDecimal("rmbRate"));
         contract.setLcSN(resultSet.getString("lcSN"));
         contract.setLcTimeLimit(resultSet.getString("lcTimeLimit"));
         contract.setLcFrom(resultSet.getString("lcFrom"));

@@ -60,8 +60,12 @@ public class FilterUtil {
      * @return
      */
     public static Boolean isContain(String s){
+        //参数值为空也返回TRUE
+        if (s.equals("")){
+            return true;
+        }
         boolean flag = false;
-        String wrong = "|'\\(\\)\\+\n\r\"><=/;\\'\\|";
+        String wrong = "|'\\(\\)\\+\n\r><=;\\'\\|";//这里将文件路径写入数据库，暂时不过滤"双引号
         String scriptWrong = "script";
         for (String ss:s.split("")) {
             if (wrong.contains(ss)){
