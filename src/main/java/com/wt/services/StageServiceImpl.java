@@ -15,20 +15,13 @@ public class StageServiceImpl implements StageService {
     public void insert(Stage stage){
         stageDao.insert(stage);
     }
-    public void delete(int id){
-        stageDao.delete(id);
-
-    }
-    public void update(Stage stage){
-        stageDao.update(stage);
-
-    }
+    public void delete(int id){stageDao.delete(id);}
+    public void update(Stage stage){stageDao.update(stage);}
     public List<Stage> getStageList(){
         return stageDao.getStageList();
     }
     public List<Stage> getStageListByConSN(String conSN){return stageDao.getStageListByConSN(conSN);}
-    public Stage getStageById(int id){
-        return stageDao.getStageById(id);
-    }
-    public int getStageNumByContract(String contractSN){return stageDao.getStageNumByContract(contractSN);}
+    public Stage getStageById(int id){return stageDao.getStageById(id);}
+    public Stage getStageByStageNum(Integer num,String conSn){return stageDao.getStageByStageNum(num,conSn);}
+    public Integer getStageNumByContract(String contractSN){return stageDao.getStageNumByContract(contractSN);}
 }

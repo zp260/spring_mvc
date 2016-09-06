@@ -14,5 +14,6 @@ public interface StageDao {
     public List<Stage> getStageList();
     public List<Stage> getStageListByConSN(String conSN);
     public Stage getStageById(int id);
-    public int getStageNumByContract(String contractSN); //通过合同号查已经有多少已存批次
+    public Stage getStageByStageNum(Integer num,String conSn);
+    public Integer getStageNumByContract(String contractSN); //通过合同号查已经有多少已存批次
 }

@@ -30,11 +30,11 @@ public class GoodsServiceImpl implements GoodsService {
        return goodsDao.goodsList();
     }
     @Override
+    public List<Goods> goodsListByConStage(String con,Integer num){return goodsDao.goodsListByConStage(con,num);}
+    @Override
     public Goods getGoodById(int id){
             return  goodsDao.getGoodById(id);
     }
     @Override
-    public Goods getGoodByName(String goodName){
-            return goodsDao.getGoodByName(goodName);
-    }
+    public Goods getGoodByName(String goodName){return goodsDao.getGoodByName(goodName);}
 }

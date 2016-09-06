@@ -81,6 +81,9 @@ public class BaseController {
                 case "int":
                     fieldMethod.invoke(object,resultset.getInt(fieldName));
                     break;
+                case "java.lang.Integer":
+                    fieldMethod.invoke(object,resultset.getInt(fieldName));
+                    break;
                 case "java.lang.Boolean":
                     fieldMethod.invoke(object,resultset.getBoolean(fieldName));
                     break;

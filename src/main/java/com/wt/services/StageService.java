@@ -14,5 +14,6 @@ public interface StageService {
     public List<Stage> getStageList();
     public List<Stage> getStageListByConSN(String conSN);
     public Stage getStageById(int id);
-    public int getStageNumByContract(String contractSN);
+    public Stage getStageByStageNum(Integer num,String conSn);
+    public Integer getStageNumByContract(String contractSN);
 }

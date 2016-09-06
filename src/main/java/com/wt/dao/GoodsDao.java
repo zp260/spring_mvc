@@ -12,6 +12,7 @@ public interface GoodsDao {
     public void deleteGoods(int id);
     public void updateGoods(Goods goods);
     public List<Goods> goodsList();
+    public List<Goods> goodsListByConStage(String con,Integer num);
     public Goods getGoodById(int id);
     public Goods getGoodByName(String goodName);
 }

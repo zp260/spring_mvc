@@ -50,7 +50,7 @@ public class LoginController {
                     //        登陆成功写入SEESION
                     httpSession.setAttribute(SessionHelper.UserHandler, logined);
                 }
-                model.setViewName("redirect:/conbase/add");
+                model.setViewName("redirect:/login2.html");
             }
 
         }

@@ -1,7 +1,11 @@
 package com.wt.controller;
 
 import com.wt.controller.util.CallbackMap;
+import com.wt.model.Goods;
+import com.wt.model.Port;
 import com.wt.model.Stage;
+import com.wt.services.GoodsService;
+import com.wt.services.PortService;
 import com.wt.services.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,11 +28,17 @@ import java.util.Map;
 public class StageController {
     @Autowired
     StageService stageService;
+    @Autowired
+    PortService portService;
+    @Autowired
+    GoodsService goodsService;
 
     @RequestMapping("/stage/list")
     public ModelAndView list(@RequestParam(value = "conSN",required = false)String conSN){
         List<Stage> list = new ArrayList<Stage>();
-        if ("".equals(conSN) || null==conSN){
+        if (null==conSN){
+            list = stageService.getStageList();
+        }else if("".equals(conSN)){
             list = stageService.getStageList();
         }else {
             list = stageService.getStageListByConSN(conSN);
@@ -36,6 +46,48 @@ public class StageController {
         return new ModelAndView("/stage/list","list",list);
     }
 
+    /**
+     * HTML 获取STAGE信息
+     * @param num
+     * @param conSN
+     * @param stage
+     * @return
+     */
+    @RequestMapping(value = "/stage/getByNumHtml")
+    public ModelAndView stageByNum(@RequestParam(value = "num")Integer num, @RequestParam(value = "consn")String conSN, @ModelAttribute Stage stage, @ModelAttribute Goods goods){
+        ModelAndView mv  =new ModelAndView();
+        Map<String,Object> map= new HashMap<String, Object>();
+        List<Goods> goodsList = new ArrayList<Goods>();
+        if (num!=null && conSN!=null){
+            stage =  stageService.getStageByStageNum(num,conSN);
+            goodsList = goodsService.goodsListByConStage(conSN,num);
+        }
+        List<Port> portList = portService.getPortList();
+        mv.addObject("portList",portList);
+        mv.addObject(stage);
+        mv.addObject("goodsList",goodsList);
+        mv.setViewName("/stage/getByNumHtml");
+        return mv;
+    }
+    /**
+     * json获取批次信息
+     * @param num
+     * @param conSN
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/stage/getByNum",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView stageByNum(@RequestParam(value = "num")Integer num,@RequestParam(value = "consn")String conSN){
+        Stage onestage = new Stage();
+        Map<String,Object> map= new HashMap<String, Object>();
+        if (num!=null && conSN!=null){
+            onestage =  stageService.getStageByStageNum(num,conSN);
+            map.put("stage",onestage);
+        }
+
+       return new ModelAndView(new MappingJackson2JsonView(),map);
+
+    }
     @RequestMapping("/stage/add")
     public String add(@ModelAttribute Stage stage){
 
@@ -45,7 +97,7 @@ public class StageController {
     @RequestMapping(value = "/stage/insert",produces = {"application/json;charset=UTF-8"})
     public ModelAndView insert(@ModelAttribute Stage stage){
         Map<String,Object> map = new HashMap<String, Object>();
-        if (stage!=null){
+        if (stage!=null && stage.getConSN()!=null){
             int stageNum = stageService.getStageNumByContract(stage.getConSN());
             stage.setStageNum(stageNum);
             stageService.insert(stage);

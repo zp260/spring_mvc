@@ -12,7 +12,7 @@ import java.sql.Date;
 public class Stage {
     private int         id;                     //id
     private String      conSN;                  //合同号
-    private int         stageNum;               //批次号
+    private Integer     stageNum;               //批次号
 
     private String      goodsArriveCoalDate;    //到矿时间
     private String      goodsSendETime;         //（进出口）批次（货物）预计发货时间
@@ -85,11 +85,11 @@ public class Stage {
         this.conSN = conSN;
     }
 
-    public int getStageNum() {
+    public Integer getStageNum() {
         return stageNum;
     }
 
-    public void setStageNum(int stageNum) {
+    public void setStageNum(Integer stageNum) {
         this.stageNum = stageNum;
     }
 

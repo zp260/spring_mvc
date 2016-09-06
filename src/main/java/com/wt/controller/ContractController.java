@@ -7,6 +7,7 @@ import com.wt.model.*;
 import com.wt.services.ContractService;
 import com.wt.services.CurrencyService;
 import com.wt.services.PortService;
+import com.wt.services.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,8 @@ public class ContractController extends BaseController {
     CurrencyService currencyService;
     @Autowired
     PortService portService;
+    @Autowired
+    StageService stageService;
 
     @FireAuthority(authorityTypes = AuthorityType.Contract_CREATE)
     @RequestMapping("/conbase/add")
@@ -51,7 +54,7 @@ public class ContractController extends BaseController {
     @RequestMapping(value = "/conbase/insert",produces = {"application/json;charset=UTF-8"})
     public ModelAndView insertCon(@ModelAttribute Contract contract){
         Map<String,Object> map = new HashMap<String, Object>();
-        if (contract!=null && null!=contract.getConSN()){
+        if (contract!=null && null!=contract.getConSN() && ""!=contract.getConSN()){
             if (!contractService.hasContract(contract.getConSN())){ //判断如果不存在已有合同就写入
                 contractService.insert(contract);
                  map =  new CallbackMap("合同信息增加成功",true,null).getCallBackMap();
@@ -67,22 +70,88 @@ public class ContractController extends BaseController {
         return new ModelAndView (new MappingJackson2JsonView(),map);
     }
 
+    /**
+     * 根据合同号查询合同
+     * @param id     合同ID
+     * @param conSN  合同号
+     * @param contract
+     * @param stage
+     * @return
+     */
     @FireAuthority(authorityTypes = AuthorityType.Contract_FIND)
     @RequestMapping("/conbase/list")
-    public ModelAndView conList(@RequestParam(value = "id",required = false) int id,@RequestParam(value = "conSN",required = false)String conSN){
-        Contract contract = new Contract();
+    public ModelAndView conList(@RequestParam(value = "id",required = false) Integer id,@RequestParam(value = "conSN",required = false)String conSN,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
+
+        Contract oneContract = new Contract();
         ModelAndView mv = new ModelAndView();
-        if (id>0){
-            contract = contractService.getContractById(id);
+        Integer stageNum=0;
+        if (null !=id && id>0){
+            oneContract = contractService.getContractById(id);
+            if (null!=oneContract){
+                stageNum = stageService.getStageNumByContract(oneContract.getConSN());
+                mv.addObject(oneContract);
+            }
+
 
         }else if (null != conSN){
-            contract = contractService.getContractByConSN(conSN);
+            oneContract = contractService.getContractByConSN(conSN);
+            if (null!=oneContract){
+                stageNum = stageService.getStageNumByContract(oneContract.getConSN());
+                mv.addObject(oneContract);
+            }
         }
         else {
             List<Contract> conList = contractService.ContractList();
+            mv.addObject("list",conList);
         }
 
-        mv.addObject(contract);
+        mv.addObject("stageNum",stageNum);
+        mv.setViewName("/conbase/list");
+        return mv;
+    }
+
+    /**
+     *
+     * @param fieldName 字段名称
+     * @param value 字段值
+     * @param contract
+     * @param stage
+     * @return
+     */
+    @RequestMapping("/conbase/search")
+    public ModelAndView conList(@RequestParam(value = "fieldName",required = true)String fieldName,@RequestParam(value = "value")String value,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
+
+        ModelAndView mv = new ModelAndView();
+        List<Contract> conList = new ArrayList<Contract>();
+        if (null!=fieldName && null!=value){
+            if (fieldName.equals("goodsName")){
+                conList = contractService.getConByGood(value);
+            }else {
+                conList = contractService.selectAll(fieldName,value);
+            }
+        }
+        mv.addObject("list",conList);
+        mv.setViewName("/conbase/list");
+        return mv;
+    }
+
+    /**
+     * 根据合同签订时间查询
+     * @param start 合同开始时间
+     * @param end   搜索结束时间
+     * @param contract
+     * @param stage
+     * @return      符合的合同列表
+     */
+    @RequestMapping("/conbase/searchByDate")
+    public ModelAndView conListByDate(@RequestParam(value = "start")String start,@RequestParam(value = "end")String end,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
+
+        ModelAndView mv = new ModelAndView();
+        List<Contract> conList = new ArrayList<Contract>();
+        if (null!=start && null!=end){
+            conList = contractService.getConByDate(start,end);
+        }
+        mv.addObject("list",conList);
         mv.setViewName("/conbase/list");
         return mv;
     }

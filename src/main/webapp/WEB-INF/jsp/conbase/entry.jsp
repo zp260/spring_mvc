@@ -75,12 +75,11 @@
             </li>
             <li class="ne">
                 <div class="new1">合同金额</div>
-                <select class="news1 wi" name="monetaryUnit" id="monetaryUnit" datatype="*" nullmsg="货币单位必须选择">
-                    <option>货币</option>
+                <select class="news1 wi" name="monetaryUnit" id="monetaryUnit" datatype="*" nullmsg="货币单位必须选择" errormsg="货币单位必须选择">
+                    <option value="">货币</option>
                     <c:forEach var="list" items="${currencyList}">
                         <option value="${list.moneyName}">${list.moneyName}</option>
                     </c:forEach>
-
                 </select>
                 <form:input path="conPrice"  class="news" datatype="rule_nums"  nullmsg="合同金额必须输入" errormsg="合同金额必须是数字类型" />
             </li>
@@ -209,8 +208,8 @@
             </li>
             <li class="ne">
                 <div class="new">进口口岸</div>
-                <form:select path="port" class="news">
-                    <option>口岸</option>
+                <form:select path="port" class="news" datatype="*" errormsg="口岸必须选择"  nullmsg="口岸必须选择">
+                    <option value="">口岸</option>
                    <c:forEach var="portList" items="${portList}">
                        <option value="${portList.portName}">${portList.portName}</option>
                    </c:forEach>
@@ -325,7 +324,7 @@
     </form:form>
     <!--批次信息 end-->
 </div>
-
+<!--批次 end -->
 <!--录入完批次信息后录入跟批次有关的设备信息-->
 <div class="start" id="goodsStart">
     <form:form action="/goods/insert" method="post" modelAttribute="goods">
@@ -461,9 +460,10 @@
                 contract = $("#conSN").val();
                 $("#stageConSN").val(contract);
                 $("#goodsConSN").val(contract);
+                $(':input','#contract').not(':button, :submit, :reset, :hidden').attr('readonly',true);//上传完成禁止再次编辑表单
             }
             if (data.success == false){
-
+                alert(data.errormsg);
             }
         }
     });
@@ -475,6 +475,7 @@
             if (data.success){
                 stageNum = data.stageNum;
                 $("goodsStageNum").val(stageNum);
+                $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',true);//上传完成禁止再次编辑表单
             }else{
                 alert(data.errormsg);
             }
@@ -547,10 +548,6 @@
             fileObj = obj;
             fileArray = []; //新的上传，清空文件数组
         }
-
-
-
-
     }
 </script>
 

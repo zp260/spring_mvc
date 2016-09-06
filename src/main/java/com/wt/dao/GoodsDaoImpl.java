@@ -62,6 +62,14 @@ public class GoodsDaoImpl extends BaseController implements GoodsDao {
         return list;
     }
     @Override
+    public List<Goods> goodsListByConStage(String con,Integer num){
+        List<Goods> list = new ArrayList<Goods>();
+        String sql = "SELECT * FROM goods WHERE conSN=? AND stageNum=?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        list = jdbcTemplate.query(sql,new GoodsRowMapper(),new Object[]{con,num});
+        return list;
+    }
+    @Override
     public Goods getGoodById(int id){
         List<Goods> list = new ArrayList<Goods>();
         String sql = "SELECT * FROM goods WHERE goodsId="+id;

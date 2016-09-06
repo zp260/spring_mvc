@@ -137,7 +137,7 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
     @Override
     public List<Contract> ContractList(){
         List contractList = new ArrayList();
-        String sql = "SELECT * from conBase";
+        String sql = "SELECT * from conBase WHERE isInPort=TRUE";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
         contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return contractList;
@@ -148,7 +148,12 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
         String sql = "SELECT * from conBase WHERE id="+id;
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
         contractList = jdbcTemplate.query(sql, new ContractRowMapper());
-        return  contractList.get(0);
+        try{
+            return contractList.get(0);
+        }catch (IndexOutOfBoundsException ex)
+        {
+            return null;
+        }
     }
     @Override
     public Contract getContractByConSN(String conSN){
@@ -156,8 +161,14 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
         String sql = "SELECT * from conBase WHERE conSN=?";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
         contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{conSN});
-        return  contractList.get(0);
+        try{
+            return contractList.get(0);
+        }catch (IndexOutOfBoundsException ex)
+        {
+            return null;
+        }
     }
+
     @Override
     public void verify(int id){
         String sql = "UPDATE conBase SET conVerify=TRUE WHERE id=?";
@@ -171,6 +182,34 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         Integer count =  jdbcTemplate.queryForObject(sql,new Object[]{conSN},Integer.class);
         return (count>0 ? true :false);
+    }
+
+    /**
+     * 根据字段名进行搜索
+     * @param fieldName 字段名
+     * @param value 字段值
+     * @return
+     */
+    @Override
+    public List<Contract> selectAll(String fieldName,Object value){
+        String sql = "SELECT * from conBase WHERE "+fieldName+"=? AND isInPort=TRUE";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{value});
+        return contractList;
+    }
+    @Override
+    public List<Contract> getConByDate(String startDate,String endDate){
+        String sql = "SELECT * from conBase WHERE isInPort=TRUE AND conDate BETWEEN ? AND ? ";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{startDate,endDate});
+        return contractList;
+    }
+    @Override
+    public List<Contract> getConByGood(String goodName){
+        String sql = "select conBase.* FROM goods,conBase WHERE isInPort=TRUE AND goods.goodsName = ? AND conBase.conSN = goods.conSN GROUP BY conSN ORDER BY id";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{goodName});
+        return contractList;
     }
 
 }

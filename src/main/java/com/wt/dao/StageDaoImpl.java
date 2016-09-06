@@ -255,14 +255,32 @@ public class StageDaoImpl extends BaseController implements StageDao {
         String sql = "SELECT * FROM stage where id="+id;
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper());
-        return  stageList.get(0);
+        try{
+            return stageList.get(0);
+        }catch (IndexOutOfBoundsException ex)
+        {
+            return null;
+        }
 
     }
     @Override
-    public int getStageNumByContract(String contractSN){
+    public Stage getStageByStageNum(Integer num,String conSn){
+        List<Stage> stageList = new ArrayList<Stage>();
+        String sql = "SELECT * FROM stage where stageNum=? AND conSN=?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        String sql = "SELECT COUNT(stageNum) from stage WHERE stageNum=?";
-        int count= jdbcTemplate.queryForObject(sql,new Object[]{contractSN},Integer.class);
+        stageList = jdbcTemplate.query(sql,new StageRowMapper(),new Object[]{num,conSn});
+        try{
+            return stageList.get(0);
+        }catch (IndexOutOfBoundsException ex)
+        {
+            return null;
+        }
+    }
+    @Override
+    public Integer getStageNumByContract(String contractSN){
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        String sql = "SELECT COUNT(stageNum) from stage WHERE conSN=?";
+        Integer count= jdbcTemplate.queryForObject(sql,new Object[]{contractSN},Integer.class);
         return count;
     }
 }
