@@ -158,6 +158,10 @@
         <ul class="nav_ul oh">
             <li style="display: none;"> <input type="input" name="conSN" value="" id="stageConSN" ></li>
             <li class="ne">
+                <div class="new">批次</div>
+                <form:input path="stageNum" class="news" datatype="n" errormsg="批次信息必须为数字"  nullmsg="批次信息必须输入" />
+            </li>
+            <li class="ne">
                 <div class="new">预计发货时间</div>
                 <form:input path="goodsSendETime" class="news date_picker" datatype="rule_date" errormsg="日期格式错误，例子:2012-01-03"  nullmsg="预计发货时间必须输入" />
             </li>
@@ -197,6 +201,10 @@
                     </span>
                 </div>
                 <form:input path="cdSN" class="news" datatype="*"  nullmsg="报关单号必须输入" />
+            </li>
+            <li class="ne">
+                <div class="new">报关金额</div>
+                <form:input path="cdPrice" class="news" datatype="rule_nums" errormsg="报关金额必须为数字类型"  nullmsg="报关金额必须输入"  />
             </li>
             <li class="ne">
                 <div class="new">进口日期</div>
@@ -336,8 +344,8 @@
     </div>
         <div class="clear"></div>
         <ul class="nav_ul oh" style="width: 100%" >
-            <li style="display: none;"><label>所属合同号</label><input type="input" name="conSN" value="" id="goodsConSN"></li>
-            <li style="display: none;"><label>所属批次id</label><form:input path="stageNum" id="goodsStageNum"/></li>
+            <li style="display: none;"><label>所属合同号</label><input type="text" name="conSN" value="" id="goodsConSN"></li>
+            <li style="display: none;"><label>所属批次id</label><input type="text" name="stageNum" id="goodsStageNum"/></li>
             <li class="ne"><div class="new">货物名称</div><form:input path="goodsName" class="news" datatype="*"  nullmsg="货物名称必须输入"/></li>
             <li class="ne"><div class="new">货物金额</div><form:input path="goodsPrice" class="news" datatype="rule_nums"  nullmsg="货物金额必须输入"  errormsg="金额必须是数字类型" /></li>
             <li class="ne"><div class="new">规格型号</div><form:input path="goodsModel" class="news" /></li>
@@ -473,8 +481,8 @@
         ajaxPost:true,
         callback:function(data){
             if (data.success){
-                stageNum = data.stageNum;
-                $("goodsStageNum").val(stageNum);
+                stageNum=$("#stageNum").val();
+                $("#goodsStageNum").val(stageNum);
                 $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',true);//上传完成禁止再次编辑表单
             }else{
                 alert(data.errormsg);

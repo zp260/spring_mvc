@@ -98,14 +98,13 @@
 </div>
 <!--查询栏 end-->
 <!--合同基本信息 start-->
-<div class="start">
+<div class="start" style="display: none;">
     <form:form action="/conbase/insert" method="post" modelAttribute="contract">
 
         <div class="del fl">
             <label>1</label><span class="bt">合同基本信息</span>
         </div>
         <div class="del fr">
-            <span  id="moreStage"><input type="button" value="增加批次信息" class="zj fz" onclick=""></span>
             <input type="submit" value="修改合同" class="zj fz" id="changeConBt">
         </div>
         <ul class="nav_ul oh">
@@ -191,14 +190,6 @@
 
 
     </form:form>
-</div>
-<!--合同基本信息 end-->
-<div id="stageNums">
-   <c:if test="${stageNum>0}">
-        <c:forEach begin="0" step="1" end="${stageNum-1}" var="varStatus">
-            <a href="javascript:getStage(${varStatus});">${varStatus}</a>
-        </c:forEach>
-   </c:if>
 </div>
 <!--批次信息 start-->
 <div class="start" id="stageForm" style="display: none;">
@@ -381,7 +372,7 @@
 
 </div>
 <!--批次 end --><!--批次信息 end-->
-<table>
+<table class="listTable">
     <tr>
      <th>id</th>
      <th>合同号 </th>
@@ -389,7 +380,6 @@
      <th>是否审核通过 </th>
      <th>使用单位 </th>
      <th>供货商 </th>
-     <th>中标通知书编码 </th>
      <th>合同金额 </th>
      <th>折美元金额 </th>
      <th>折人民币金额 </th>
@@ -404,7 +394,6 @@
       <td>${con.conVerify}</td>
       <td>${con.useORG}</td>
       <td>${con.supplier}</td>
-      <td>${con.biddingSN}</td>
       <td>${con.conPrice}</td>
       <td>${con.atDoller}</td>
       <td>${con.atRMB}</td>
@@ -419,63 +408,6 @@
     function getStage(num){
         var bodyWidth =  $(document.body).width();
         window.showModalDialog("/stage/getByNumHtml?num="+num+"&consn="+"${contract.conSN}",window,"dialogWidth:"+bodyWidth);
-        $.ajax({
-            type:'POST',
-            url:"/stage/getByNum",
-            datatype:"json",
-            data: "num="+num+"&consn=${contract.conSN}",
-            success:function(data, textStatus, jqXHR){
-                if(null!=data.stage){
-                    $("#bankFHtime").val(data.stage.bankFHtime);
-                    $("#bankNoticeBillTime").val(data.stage.bankNoticeBillTime);
-                    $("#billTime").val(data.stage.billTime);
-                    $("#billToCustomsDate").val(data.stage.billToCustomsDate);
-                    $("#boxDocPdf").val(data.stage.boxDocPdf);
-                    $("#cdPdf").val(data.stage.cdPdf);
-                    $("#cdPrice").val(data.stage.cdPrice);
-                    $("#cdSN").val(data.stage.cdSN);
-                    $("#cdTime").val(data.stage.cdTime);
-                    $("#coPdf").val(data.stage.coPdf);
-                    $("#conSN").val(data.stage.conSN);
-                    $("#containerCheckTime").val(data.stage.containerCheckTime);
-                    $("#ebDate").val(data.stage.ebDate);
-                    $("#fumigationCharges").val(data.stage.fumigationCharges);
-                    $("#getDocPdf").val(data.stage.getDocPdf);
-                    $("#getFHtime").val(data.stage.getFHtime);
-                    $("#goodsArriveATime").val(data.stage.goodsArriveATime);
-                    $("#goodsArriveCoalDate").val(data.stage.goodsArriveCoalDate);
-                    $("#goodsArriveETime").val(data.stage.goodsArriveETime);
-                    $("#goodsSendATime").val(data.stage.goodsSendATime);
-                    $("#goodsSendETime").val(data.stage.goodsSendETime);
-                    $("#inspectionCharges").val(data.stage.inspectionCharges);
-                    $("#inspectionPdf").val(data.stage.inspectionPdf);
-                    $("#inspectionSN").val(data.stage.inspectionSN);
-                    $("#inspectionTime").val(data.stage.inspectionTime);
-                    $("#invoicePdf").val(data.stage.invoicePdf);
-                    $("#lateFee").val(data.stage.lateFee);
-                    $("#openContainerResoult").val(data.stage.openContainerResoult);
-                    $("#openContainerTime").val(data.stage.openContainerTime);
-                    $("#passTime").val(data.stage.passTime);
-                    $("#paytax").val(data.stage.paytax);
-                    $("#port").val(data.stage.port);
-                    $("#portDate").val(data.stage.portDate);
-                    $("#specialTariff").val(data.stage.specialTariff);
-                    $("#specialTariffPdf").val(data.stage.specialTariffPdf);
-                    $("#stageNum").val(data.stage.stageNum);
-                    $("#tariffs").val(data.stage.tariffs);
-                    $("#tariffsPdf").val(data.stage.tariffsPdf);
-                    $("#taxDate").val(data.stage.taxDate);
-                    $("#vat").val(data.stage.vat);
-                    $("#vatPdf").val(data.stage.vatPdf);
-                    console.log(data);
-                }
-
-
-            },
-            error:function(){
-
-            }
-        })
     }
 </script>
 </body>

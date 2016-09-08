@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class Goods {
   private int           goodsId;      //货物ID
   private String        conSN;        //所属合同号
-  private int           stageNum;      //所属批次id
+  private Integer       stageNum;      //所属批次id
   private String        goodsName;    //货物名称
   private BigDecimal    goodsPrice;   //货物金额
   private String        goodsModel;   //规格型号
@@ -30,11 +30,11 @@ public class Goods {
         this.conSN = conSN;
     }
 
-    public int getStageNum() {
+    public Integer getStageNum() {
         return stageNum;
     }
 
-    public void setStageNum(int stageNum) {
+    public void setStageNum(Integer stageNum) {
         this.stageNum = stageNum;
     }
 

@@ -59,9 +59,7 @@ public class GoodsController {
     @RequestMapping("/goods/editByid")
     public ModelAndView editGood(@RequestParam int id,@ModelAttribute Goods goods){
 
-            Goods newgoods =  goodsService.getGoodById(id);
-
-
+        Goods newgoods =  goodsService.getGoodById(id);
         return new ModelAndView("/goods/edit","good",newgoods);
     }
 
@@ -69,19 +67,33 @@ public class GoodsController {
     public ModelAndView editGood(@ModelAttribute Goods goods,@RequestParam String goodname){
 
         Goods newgoods =  goodsService.getGoodByName(goodname);
-
-
         return new ModelAndView("/goods/edit","good",newgoods);
     }
 
     @RequestMapping("/goods/update")
-    public String updateGoods(@ModelAttribute Goods goods){
-        goodsService.updateGoods(goods);
-        return "redirect:/goods/list";
+    public ModelAndView updateGoods(@ModelAttribute Goods goods){
+        ModelAndView mv = new ModelAndView();
+        Map<String,Object> map = new HashMap<String,Object>();
+        try{
+            if(null!=goods.getConSN() && null!=goods.getStageNum() && goods.getGoodsId()>0){
+                goodsService.updateGoods(goods);
+                map = new CallbackMap("修改成功",true,null).getCallBackMap();
+            }
+        }catch (NullPointerException e){
+            map = new CallbackMap("修改失败",false,"ID参数错误").getCallBackMap();
+        }
+        mv.setView(new MappingJackson2JsonView());
+        mv.addAllObjects(map);
+        return mv;
     }
-    @RequestMapping("/goods/del")
-    public String delGood(@RequestParam int id){
+    @ResponseBody
+    @RequestMapping(value = "/goods/del",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView delGood(@RequestParam int id){
+        ModelAndView mv = new ModelAndView();
+        Map<String,Object> map = new CallbackMap("删除成功",true,null).getCallBackMap();
         goodsService.deleteGoods(id);
-        return "redirect:/goods/list";
+        mv.setView(new MappingJackson2JsonView());
+        mv.addAllObjects(map);
+        return mv;
     }
 }

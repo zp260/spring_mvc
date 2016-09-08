@@ -47,7 +47,7 @@ public class StageController {
     }
 
     /**
-     * HTML 获取STAGE信息
+     * HTML 根据批次号获取STAGE信息HTML版本
      * @param num
      * @param conSN
      * @param stage
@@ -70,7 +70,7 @@ public class StageController {
         return mv;
     }
     /**
-     * json获取批次信息
+     * json 根据批次号获取STAGE信息JSON版本
      * @param num
      * @param conSN
      * @return
@@ -98,30 +98,42 @@ public class StageController {
     public ModelAndView insert(@ModelAttribute Stage stage){
         Map<String,Object> map = new HashMap<String, Object>();
         if (stage!=null && stage.getConSN()!=null){
-            int stageNum = stageService.getStageNumByContract(stage.getConSN());
-            stage.setStageNum(stageNum);
             stageService.insert(stage);
             map =  new CallbackMap("批次信息增加成功",true,null).getCallBackMap();
-            map.put("stageNum",stageNum);
         }else {
             map =  new CallbackMap("批次信息输入不正确",false,"批次信息为空").getCallBackMap();
         }
         return new ModelAndView (new MappingJackson2JsonView(),map);
     }
-
-    @RequestMapping("/stage/update")
-    public String update(@ModelAttribute Stage stage){
-        if (stage!=null){
+    @ResponseBody
+    @RequestMapping(value = "/stage/update",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView update(@ModelAttribute Stage stage){
+        Map<String,Object> map = new HashMap<String, Object>();
+        if (stage!=null&& stage.getConSN()!=null){
             stageService.update(stage);
+            map =  new CallbackMap("批次信息修改成功",true,null).getCallBackMap();
+        }else {
+            map =  new CallbackMap("批次信息修改失败",false,"信息提交有误").getCallBackMap();
         }
-        return "redirect:/stage/list";
+        return new ModelAndView (new MappingJackson2JsonView(),map);
 
     }
 
     @RequestMapping("/stage/edit")
-    public ModelAndView edit(@RequestParam int id,@ModelAttribute Stage stage){
-       Stage stage1 = stageService.getStageById(id);
-        return new ModelAndView("/stage/edit","stage",stage1);
+    public ModelAndView edit(@RequestParam int id,@ModelAttribute Stage stage,@ModelAttribute Goods goods){
+        ModelAndView mv=new ModelAndView("/stage/edit");
+        stage = stageService.getStageById(id);
+        List<Goods> goodsList = new ArrayList<Goods>();
+        List<Port> portList = portService.getPortList();
+        String conSN = stage.getConSN();
+        Integer stageNum = stage.getStageNum();
+        if(null!=stage && null!=conSN && null!=stageNum){
+            goodsList = goodsService.goodsListByConStage(conSN,stageNum);
+        }
+        mv.addObject("goodsList",goodsList);
+        mv.addObject("portList",portList);
+        mv.addObject(stage);
+        return mv;
     }
 
 }

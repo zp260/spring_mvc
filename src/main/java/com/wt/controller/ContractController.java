@@ -157,9 +157,19 @@ public class ContractController extends BaseController {
     }
 
     @RequestMapping("/conbase/edit")
-    public ModelAndView conEdit(@RequestParam int id,@ModelAttribute Contract contract){
+    public ModelAndView conEdit(@RequestParam int id,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
+        ModelAndView mv = new ModelAndView();
+        Integer stageNum=0;
+        List<Stage> stageList =new ArrayList<Stage>();
+        List<Currency> currencyList = currencyService.list();
+        List<Port> portList = portService.getPortList();
         contract = contractService.getContractById(id);
-        List<Boolean> inPort = new ArrayList<Boolean>();
+        if (null!=contract){
+            String conSn =contract.getConSN();
+            stageNum = stageService.getStageNumByContract(conSn);
+            stageList = stageService.getStageListByConSN(conSn);
+        }
+        List<Boolean> inPort = new ArrayList<Boolean>();//进口出口
         if(contract.getIsInport()){
             inPort.add(0,true);
             inPort.add(1,false);
@@ -168,18 +178,30 @@ public class ContractController extends BaseController {
             inPort.add(1,true);
         }
         Map<String,Object> map =new HashMap<String,Object>();
-        map.put("contract",contract);
         map.put("inport",inPort);
-        return new ModelAndView("/conbase/edit","map",map);
+        mv.addObject("map",map);
+        mv.addObject(contract);
+        mv.addObject("stageNum",stageNum);
+        mv.addObject("currencyList",currencyList);
+        mv.addObject("portList",portList);
+        mv.addObject("stageList",stageList);
+        mv.setViewName("/conbase/edit");
+        return  mv;
     }
 
     @RequestMapping("/conbase/update")
-    public String conUpdate(@ModelAttribute Contract contract){
-        if (contract!=null){
-            contractService.update(contract);
-        }
+    public ModelAndView conUpdate(@ModelAttribute Contract contract){
+        Map<String,Object> map =new HashMap<String,Object>();
+        if (contract!=null && null!=contract.getConSN()){
+            try {
+                contractService.update(contract);
+                map = new CallbackMap("合同信息修改成功",true,null).getCallBackMap();
+            }catch (Exception e){
+                new CallbackMap("合同信息修改失败",false,"请检查提交表单").getCallBackMap();
+            }
 
-        return "redirect:/conbase/list";
+        }
+        return new ModelAndView(new MappingJackson2JsonView(),map);
     }
 
     @RequestMapping("/conbase/del")
