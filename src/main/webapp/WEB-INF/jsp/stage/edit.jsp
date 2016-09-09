@@ -23,43 +23,63 @@
     <script src="/js/Validform_v5.3.2.js" type="text/javascript"></script>
     <script src="/js/ValidForm_ext.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/css/validform/style.css" type="text/css" media="all" />
-<script type="text/javascript">
-//        初始化一些全局变量
-        var fileArray = []; //存储已上传的文件数组
-        var contract="${stage.conSN}"; //用来储存当前合同号
-        var fileObj; //存储当前上传的PDF inuput对象
-        var stageNum=${stage.stageNum};
+    <script src="/js/pdfobject.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+           /**初始化一些全局变量
+            *
+            * @type fileArray {Array}  存储已上传的文件数组
+            * @contract                用来储存当前合同号
+            * @fileObj                 存储当前上传的PDF inuput对象
+            * @stageNum                存储提交批次信息后，返回的批次数；
+            */
+            var fileArray = [];
+            var contract="${stage.conSN}";
+            var fileObj;
+            var stageNum=${stage.stageNum};
 
-        $(function(){
-            $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',true);//上传完成禁止再次编辑表单
-            $("#port").val("${stage.port}");//适配港口下拉菜单
-
-        });
-function changeStage(){
-    $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',false);//再次编辑表单
-    $(".changeHide").css("display","inline");
-    $("#changeBt").css("display","none");
-}
-</script>
+            $(function(){
+                $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',true);//上传完成禁止再次编辑表单
+                $("#port").val("${stage.port}");//适配港口下拉菜单
+            });
+            function changeStage(){
+                $(':input','#stage').not(':button, :submit, :reset, :hidden').attr('readonly',false);//再次编辑表单
+                $(".changeHide").css("display","inline");
+                $("#changeBt").css("display","none");
+            }
+            function ajax_get(url,parameter,callback) {
+                $.get(
+                        url,
+                        parameter,
+                        function (data) //回传函数
+                        {
+                            if (data.success){ //提交成功后的处理
+                                location.reload(true);
+                            }
+                            if (data.success == false){
+                                alert(data.errormsg);
+                            }
+                        }
+                );
+            }
+    </script>
 </head>
 <body>
+<!-- PDF读取显示区域-->
+<div id="readPdf"></div>
 <!--上传文件区域-->
-<div id="uploads" style="display: none;clear: both;" class="uploadLoyer">
+<div id="uploads" style="display: none;clear: both;" class="draggable">
     <a href="javascript:closeUploads();" class="closeUploads"><i class="fa fa-close"></i>关闭</a>
+    <!--批量上传按钮-->
     <form>
         <input id="file_upload" name="file_upload" type="file" multiple="true">
         <div class="bts"><a href="javascript:$('#file_upload').uploadify('upload','*')">开始上传所有文件</a><a
                 href="javascript:$('#file_upload').uploadify('cancel','*')">取消上传所有文件</a></div>
-        <!-批量上传按钮-->
-        <p>
-            <!--上传第一个未上传的文件
-            <a href="javascript:$('#file_upload').uploadify('upload')">上传</a>
-            <a href="javascript:$('#file_upload').uploadify('cancel')">取消上传</a>
-            --取消第一个未取消的文件 -->
 
-        </p>
+        <!--上传队列展示区-->
         <div id="queue"></div>
-        <!-上传队列展示区-->
+        <!--服务器已经上传过的文件列表-->
+        <div id="queueFileList"></div>
+
     </form>
 </div>
 <!--上传文件区域结束-->
@@ -118,7 +138,7 @@ function changeStage(){
                 <div class="new">报关单号
                     <a class="new_a" id="new_a" onclick="showUpload($('#cdPdf'));">电子版</a>
                     <span style="display: none;">
-                        <form:input path="cdPdf" class="new_a"/>
+                        <form:input path='cdPdf' class="new_a"/>
                     </span>
                 </div>
                 <form:input path="cdSN" class="news" datatype="*" nullmsg="报关单号必须输入"/>
@@ -282,7 +302,7 @@ function changeStage(){
                 <td>${good.goodsModel}</td>
                 <td>${good.goodsCount}</td>
 
-                <td><a href="/goods/editByid?id=${good.goodsId}">修改</a>&nbsp;<a href="/goods/del?id=${good.goodsId}">删除</a></td>
+                <td><a href="/goods/editByid?id=${good.goodsId}">修改</a>&nbsp;<a href='javascript:ajax_get("/goods/del","id=${good.goodsId}");'>删除</a></td>
 
             </tr>
         </c:forEach>
@@ -305,9 +325,13 @@ function changeStage(){
 <!--设备信息结束-->
 
 
-<!-- 序列化数组 转化成入库字符串-->
 <script type="text/javascript">
-
+    /**
+     * --序列化数组 转化成入库字符串--
+     * @param obj           需要序列化的数组
+     * @returns {string}    返回序列化的好的序列字符窜
+     * @constructor
+     */
     function Serialize(obj) {
         switch (obj.constructor) {
             case Object:
@@ -367,12 +391,18 @@ function changeStage(){
             'auto': false,
             'onUploadSuccess': function (file, data, response) {
                 var newData = eval('(' + data + ')');
-                fileArray.push(newData.path);
-                var inputPath = Serialize(fileArray);
+                var uploadPath = newData.path;
+                if(allreadyUpload(uploadPath)){
+                    fileArray.push(uploadPath);
+                }else {
+                    var s; //这个没什么用  方便调试断点用
+                }
+
+                var inputPath = Serialize(fileArray); //生成存储数据库的 数组字符窜"[/upload/20160901/name.pdf,/upload/20160901/name.pdf]"
                 //写入指定INPUT 的VALUE
                 fileObj.val(inputPath);
-                <!--将序列化的字符串转化成数组对象-->
-                var newArr = eval('(' + inputPath + ')');
+                //更新上传列表
+                fileListHtml();
 
             },
             'onFallback': function () {//检测FLASH失败调用
@@ -382,7 +412,6 @@ function changeStage(){
 
         });
     });
-
 //    <!--验证批次表单 -->
     $("#stage").Validform({
         tiptype:1,
@@ -430,9 +459,39 @@ function changeStage(){
 
     });
 
-//    <!--关闭上传界面 -->
+    /**
+     * 关闭上传界面
+     */
     function closeUploads() {
         $("#uploads").css("display", "none");
+        $("#queueFileList").html("");
+
+    }
+    /**
+     *  显示上传
+     * @param obj 存储上传的INPUT对象
+     */
+    function showUpload(obj) {
+        $("#uploads").css("display", "block");
+        <!--同一个上传 本次编辑多次上传文件的解决方案 -->
+        if (fileObj == obj) {
+            var filePath = fileObj.val();//获取已经上传的所有文件路径
+            if (filePath != "") {
+                fileArray = eval('(' + filePath + ')');//将文件数组重新赋值到全局数组变量,上传插件取到这个数组 增加后期上传的文件。
+            }
+        }
+        else {  //否则属于本次编辑初次上传
+            fileObj = obj;
+
+            if(fileObj.val()!="" && fileObj!==null && typeof(fileObj) !=="undefined" ){ //如果有值，显示出来
+                var files =  fileObj.val();
+                var files_arr =  eval("("+files+")"); //将数组字符转换成数组对象
+                fileArray = files_arr; //赋值到全局变量
+                fileListHtml();
+            }else {
+                fileArray = []; //新的上传，清空文件数组
+            }
+        }
     }
 //    <!-- 清空批次表单-->
     function clearStage() {
@@ -446,19 +505,54 @@ function changeStage(){
 
 <!-- 控制上传文件 Js -->
 <script type="text/javascript">
-    function showUpload(obj) {
-        $("#uploads").css("display", "block");//显示上传
-        <!--同一个上传 多次上传文件的解决方案 -->
-        if (fileObj == obj) {
-            var filePath = fileObj.val();//获取已经上传的所有文件路径
-            if (filePath != "") {
-                fileArray = eval('(' + filePath + ')');//将文件数组重新赋值到全局数组变量,上传插件取到这个数组 增加后期上传的文件。
+
+    //PDF文件读取代码
+    function pdfRead(obj){
+        $("#readPdf").css('display','block'); //显示PDF层
+        var pdfPath = obj.attr("pdfPath");
+        PDFObject.embed(pdfPath,"#readPdf");
+        var closeHtm = '<a href="javascript:closePdf();">关闭PDF预览</a>';
+        $("#readPdf").append(closeHtm);
+    }
+//    关闭PDF层
+    function closePdf(){
+        $("#readPdf").css('display','none');
+    }
+//    检查上传的文件是否已经上传过
+    function  allreadyUpload(file){
+        var flag=false;
+        if (fileArray.length===0){
+            return true;
+        }
+        for (i=0;i<fileArray.length;i++){
+            if (file === fileArray[i]){
+                flag = false;
+                return flag;
+            }
+            else {
+                flag=true;
             }
         }
-        else {
-            fileObj = obj;
-            fileArray = []; //新的上传，清空文件数组
+        return flag;
+    }
+    <!--删除这个要更新上传的PDF -->
+    function  delPdfFile(obj){
+        var index =Number($(obj).next().val()); // 取下一个INPUT的 上传文件的值
+        fileArray.splice(index,1); //文件数组中删除
+        fileObj.val(Serialize(fileArray));
+        fileListHtml();
+    }
+
+    /**
+     *      重新生成已经上传的文件列表
+     *
+     */
+    function fileListHtml(){
+        var html="";
+        for(i=0;i<fileArray.length;i++){
+            html+= '<input type="button" onclick="delPdfFile(this)" value="删除" /> <input type="button" onclick="pdfRead($(this))" value="'+i+'" pdfPath="'+fileArray[i]+'" />';
         }
+        $("#queueFileList").html(html);
     }
 </script>
 </body>

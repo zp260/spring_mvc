@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0;
 }
-.uploadLoyer{
+.draggable{
     width: 500px;
     height:500px;
     position: absolute;
@@ -10,9 +10,13 @@
     left:50%;
     margin:-250px 0 0 -250px ;
     background: #000;
-    filter: alpha(opacity=50);
-    -moz-opacity: 0.50;
-    opacity: 0.50;
-    z-index: 100;
+    z-index: 1;
 
+}
+.draggable.is-dragging{
+    opacity: 0.5;
+    z-index: 2;
+}
+.draggable.is-dragging, .draggable:hover{
+    cursor: move;
 }

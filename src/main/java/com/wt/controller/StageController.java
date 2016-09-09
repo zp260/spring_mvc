@@ -110,6 +110,7 @@ public class StageController {
     public ModelAndView update(@ModelAttribute Stage stage){
         Map<String,Object> map = new HashMap<String, Object>();
         if (stage!=null&& stage.getConSN()!=null){
+            stage.getCdPdf().length();
             stageService.update(stage);
             map =  new CallbackMap("批次信息修改成功",true,null).getCallBackMap();
         }else {

@@ -24,12 +24,20 @@
     <script src="/js/Validform_v5.3.2.js" type="text/javascript"></script>
     <script src="/js/ValidForm_ext.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/css/validform/style.css" type="text/css" media="all"/>
-    <script type="text/javascript">
-//        <!--初始化一些全局变量-->
-        var fileArray = []; //存储已上传的文件数组
-        var contract = ""; //用来储存当前合同号
-        var fileObj; //存储当前上传的PDF inuput对象
-        var stageNum = -1; //存储提交批次信息后，返回的批次数；
+    <script src="/js/pdfobject.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+       /**初始化一些全局变量
+        *
+        * @type fileArray {Array}  存储已上传的文件数组
+        * @contract                用来储存当前合同号
+        * @fileObj                 存储当前上传的PDF inuput对象
+        * @stageNum                存储提交批次信息后，返回的批次数；
+        */
+        var fileArray = [];
+        var contract = "";
+        var fileObj; //
+        var stageNum = -1;
 
         function searchChange() {
             if ($("#search").val() == "conDate") {
@@ -44,6 +52,43 @@
             $(':input', '#contract').not(':button, :submit, :reset, :hidden').attr('readonly', true);//查看表单禁止编辑
             <!-- 日历控件 Js -->
             $('.date_picker').date_input();
+            <!-- 上传控件 -->
+            $("#file_upload").uploadify({
+                'swf': '/js/uploadify/uploadify.swf',
+                'uploader': '/fileupload;jsessionid=${pageContext.session.id}',
+                'cancelImg': '/js/uploadify/img/uploadify-cancel.png',
+                'queueID': 'queue',
+                'width': '100',
+                'height': '32',
+                'fileTypeDesc': '指定类型文件',
+                'fileTypeExts': '*.jpg;*.png;*.pdf',
+                'fileObjName': 'file',
+                'buttonText': '批量上传',
+                'fileSizeLimit': '100000KB',
+                'multi': true,
+                'auto': false,
+                'onUploadSuccess': function (file, data, response) {
+                    var newData = eval('(' + data + ')');
+                    var uploadPath = newData.path;
+                    if(allreadyUpload(uploadPath)){
+                        fileArray.push(uploadPath);
+                    }else {
+                        var s; //这个没什么用  方便调试断点用
+                    }
+
+                    var inputPath = Serialize(fileArray); //生成存储数据库的 数组字符窜"[/upload/20160901/name.pdf,/upload/20160901/name.pdf]"
+                    //写入指定INPUT 的VALUE
+                    fileObj.val(inputPath);
+                    //更新上传列表
+                    fileListHtml();
+
+                },
+                'onFallback': function () {//检测FLASH失败调用
+                    alert("您未安装FLASH控件，无法上传图片！请安装FLASH控件后再试。");
+                },
+                'formData': {}
+
+            });
             <!-- 验证合同输入-->
             $("#contract").Validform({
                 tiptype: 1,
@@ -94,11 +139,140 @@
             $(obj).css("display","none");
             $("#stageForm").css("display","block");
         }
-    </script>
+        /**
+         *  显示上传
+         * @param obj 存储上传的INPUT对象
+         */
+        function showUpload(obj) {
+            $("#uploads").css("display", "block");
+            <!--同一个上传 本次编辑多次上传文件的解决方案 -->
+            if (fileObj == obj) {
+                var filePath = fileObj.val();//获取已经上传的所有文件路径
+                if (filePath != "") {
+                    fileArray = eval('(' + filePath + ')');//将文件数组重新赋值到全局数组变量,上传插件取到这个数组 增加后期上传的文件。
+                }
+            }
+            else {  //否则属于本次编辑初次上传
+                fileObj = obj;
+
+                if(fileObj.val()!="" && fileObj!==null && typeof(fileObj) !=="undefined" ){ //如果有值，显示出来
+                    var files =  fileObj.val();
+                    var files_arr =  eval("("+files+")"); //将数组字符转换成数组对象
+                    fileArray = files_arr; //赋值到全局变量
+                    fileListHtml();
+                }else {
+                    fileArray = []; //新的上传，清空文件数组
+                }
+            }
+        }
+        /**
+         * 关闭上传界面
+         */
+        function closeUploads() {
+            $("#uploads").css("display", "none");
+            $("#queueFileList").html("");
+
+        }
+       /**
+        * --序列化数组 转化成入库字符串--
+        * @param obj           需要序列化的数组
+        * @returns {string}    返回序列化的好的序列字符窜
+        * @constructor
+        */
+       function Serialize(obj) {
+           switch (obj.constructor) {
+               case Object:
+                   var str = "{";
+                   for (var o in obj) {
+                       str += o + ":" + Serialize(obj[o]) + ",";
+                   }
+                   if (str.substr(str.length - 1) == ",")
+                       str = str.substr(0, str.length - 1);
+                   return str + "}";
+                   break;
+               case Array:
+                   var str = "[";
+                   for (var o in obj) {
+                       str += Serialize(obj[o]) + ",";
+                   }
+                   if (str.substr(str.length - 1) == ",")
+                       str = str.substr(0, str.length - 1);
+                   return str + "]";
+                   break;
+               case Boolean:
+                   return "\"" + obj.toString() + "\"";
+                   break;
+               case Date:
+                   return "\"" + obj.toString() + "\"";
+                   break;
+               case Function:
+                   break;
+               case Number:
+                   return "\"" + obj.toString() + "\"";
+                   break;
+               case String:
+                   return "\"" + obj.toString() + "\"";
+                   break;
+           }
+       }
+
+       //PDF文件读取代码
+       function pdfRead(obj){
+           $("#readPdf").css('display','block'); //显示PDF层
+           var pdfPath = obj.attr("pdfPath");
+           PDFObject.embed(pdfPath,"#readPdf");
+           var closeHtm = '<a href="javascript:closePdf();">关闭PDF预览</a>';
+           $("#readPdf").append(closeHtm);
+       }
+       //    关闭PDF层
+       function closePdf(){
+           $("#readPdf").css('display','none');
+       }
+       //    检查上传的文件是否已经上传过
+       function  allreadyUpload(file){
+           var flag=false;
+           if (fileArray.length===0){
+               return true;
+           }
+           for (i=0;i<fileArray.length;i++){
+               if (file === fileArray[i]){
+                   flag = false;
+                   return flag;
+               }
+               else {
+                   flag=true;
+               }
+           }
+           return flag;
+       }
+       <!--删除这个要更新上传的PDF -->
+
+       /**
+        * @param obj 要删除的对象前面的A标签
+        */
+       function  delPdfFile(obj){
+           var index =Number($(obj).next().val()); // 取下一个INPUT的 上传文件的值
+           fileArray.splice(index,1); //文件数组中删除
+           fileObj.val(Serialize(fileArray));
+           fileListHtml();
+       }
+
+       /**
+        *      重新生成已经上传的文件列表
+        *
+        */
+       function fileListHtml(){
+           var html="";
+           for(i=0;i<fileArray.length;i++){
+               html+= '<input type="button" onclick="delPdfFile(this)" value="删除" /> <input type="button" onclick="pdfRead($(this))" value="'+i+'" pdfPath="'+fileArray[i]+'" />';
+           }
+           $("#queueFileList").html(html);
+       }
+</script>
 </head>
 <body>
 <!--上传文件区域-->
-<div id="uploads" style="display: none;clear: both;" class="uploadLoyer">
+<div id="uploads" style="display: none;clear: both;" class="draggable">
     <a href="javascript:closeUploads();" class="closeUploads"><i class="fa fa-close"></i>关闭</a>
     <form>
         <input id="file_upload" name="file_upload" type="file" multiple="true">
@@ -107,8 +281,10 @@
             <a href="javascript:$('#file_upload').uploadify('upload','*')">开始上传所有文件</a>
             <a href="javascript:$('#file_upload').uploadify('cancel','*')">取消上传所有文件</a>
         </div>
-        <div id="queue"></div>
         <!-上传队列展示区-->
+        <div id="queue"></div>
+        <!--服务器已经上传过的文件列表-->
+        <div id="queueFileList"></div>
     </form>
 </div>
 <!--上传文件区域结束-->
@@ -273,7 +449,6 @@
                 <div class="new">报关金额</div>
                 <form:input path="cdPrice" class="news" datatype="rule_nums" errormsg="报关金额必须为数字类型"  nullmsg="报关金额必须输入"  />
             </li>
-            <li class="ne">
             <li class="ne">
                 <div class="new">进口日期</div>
                 <form:input path="portDate" class="news date_picker" datatype="rule_date" errormsg="日期格式错误，例子:2012-01-03"  nullmsg="进口日期必须输入"  />
