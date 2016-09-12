@@ -137,7 +137,15 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
     @Override
     public List<Contract> ContractList(){
         List contractList = new ArrayList();
-        String sql = "SELECT * from conBase WHERE isInPort=TRUE";
+        String sql = "SELECT * from conBase WHERE isInPort=TRUE AND conVerify=TRUE";
+        JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
+        contractList = jdbcTemplate.query(sql, new ContractRowMapper());
+        return contractList;
+    }
+    @Override
+    public List<Contract> noVerify(){
+        List contractList = new ArrayList();
+        String sql = "SELECT * from conBase WHERE isInPort=TRUE AND conVerify=FALSE";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
         contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return contractList;

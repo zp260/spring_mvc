@@ -11,7 +11,8 @@ public interface ContractDao {
     public void insert(Contract contract);
     public void delete(int id);
     public void update(Contract contract);
-    public List<Contract> ContractList();
+    public List<Contract> ContractList(); //审核通过的合同列表
+    public List<Contract> noVerify();     //未审核的合同列表
     public Contract getContractById(int id);
     public Contract getContractByConSN(String conSN);  //根据合同号查询
     /**

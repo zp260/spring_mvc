@@ -144,7 +144,7 @@ public class ContractController extends BaseController {
      * @return      符合的合同列表
      */
     @RequestMapping("/conbase/searchByDate")
-    public ModelAndView conListByDate(@RequestParam(value = "start")String start,@RequestParam(value = "end")String end,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
+    public ModelAndView conListByDate(@RequestParam(value = "start",required = false)String start,@RequestParam(value = "end",required = false)String end,@ModelAttribute Contract contract,@ModelAttribute Stage stage){
 
         ModelAndView mv = new ModelAndView();
         List<Contract> conList = new ArrayList<Contract>();
@@ -199,7 +199,6 @@ public class ContractController extends BaseController {
             }catch (Exception e){
                 new CallbackMap("合同信息修改失败",false,"请检查提交表单").getCallBackMap();
             }
-
         }
         return new ModelAndView(new MappingJackson2JsonView(),map);
     }
@@ -210,6 +209,15 @@ public class ContractController extends BaseController {
         return "redirect:/conbase/list";
     }
 
+    @RequestMapping("/conbase/verifyList")
+    public ModelAndView verifyList(@RequestParam(value = "start",required = false)String start,@RequestParam(value = "end",required = false)String end){
+        Contract oneContract = new Contract();
+        ModelAndView mv = new ModelAndView();
+            List<Contract> conList = contractService.noVerify();
+            mv.addObject("list",conList);
+        mv.setViewName("/conbase/verify");
+        return mv;
+    }
     @RequestMapping("/conbase/verify")
     public String conVerify(@RequestParam int id){
         if (id>0){

@@ -9,33 +9,87 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>货物查询</title>
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
+    <script type="text/javascript" src="/js/jquery.min8.js"></script>
+    <script type="text/javascript" src="/js/jquery.date_input.pack.js"></script>
 </head>
 <body>
-<table>
-    <tr>
-        <th>货物ID</th>
-        <th>所属合同号</th>
-        <th>所属批次id</th>
-        <th>货物名称</th>
-        <th>货物金额</th>
-        <th>规格型号</th>
-        <th>货物数量</th>
-    </tr>
-    <c:forEach var="list" items="${list}">
-        <tr>
-            <td><a href="/goods/editByid?id=${list.goodsId}">${list.goodsId}</a> </td>
-            <td>${list.conSN}</td>
-            <td>${list.stageId}</td>
-            <td><a href="/goods/editByName?goodname=${list.goodsName}">${list.goodsName}</a> </td>
-            <td>${list.goodsPrice}</td>
-            <td>${list.goodsModel}</td>
-            <td>${list.goodsCount}</td>
-            <td><a href="/goods/del?id=${list.goodsId}">删除</a> </td>
-        </tr>
-    </c:forEach>
+<div class="del fl">
+    <a href="" class="bt">货物查询</a>
+</div>
 
-</table>
+<div class="start currency_top fl">
+    <!--查询栏 start-->
+    <ul class="oh">
+        <li class="currency_li">
+            <select class="currency_select">
+                <option value="supplier">按供应商查询</option>
+                <option value="goodsName">按货物名称查询</option>
+                <option value="useORG">按用户名称查询</option>
+            </select>
+        </li>
+        <li>
+            <input class="currency_input" type="text">
+        </li>
+        <li>
+            <input type="submit" class="zj fz" value="查询">
+        </li>
+    </ul>
+    <!--查询栏 end-->
+</div>
+
+<div class="start currency_wrap">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>货物名称</th>
+            <th>供货商</th>
+            <th>使用单位</th>
+            <th>具体到矿时间（年/月/日）</th>
+            <th>货物金额</th>
+            <th>合同号</th>
+        </tr>
+        </thead>
+        <c:forEach var="list" items="${list}">
+            <tr>
+                <td>${list.goodsId}</td>
+                <td>${list.goodsName}</td>
+                <td>${list.supplier}</td>
+                <td>${list.useORG}</td>
+                <td>${list.goodsArriveCoalDate}</td>
+                <td>${list.goodsPrice}</td>
+                <td>${list.conSN}</td>
+            </tr>
+        </c:forEach>
+
+    </table>
+</div>
+
+
+<div class="footer fz ra fl">
+    <span>版权所有 &copy; 大同煤矿集团有限责任公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：大同市万腾科技股份有限公司</span>
+</div>
+
+
+</body>
+
+<!-- 日历控件 Js -->
+<script type="text/javascript">
+    $(function () {
+        $('.date_picker').date_input();
+    })
+</script>
+
+<!-- 控制上传文件 Js -->
+<script type="text/javascript">
+    function app() {
+        $("#new_a").click(function () {
+            $("#file1").click();
+        });
+    }
+</script>
 
 </body>
 </html>

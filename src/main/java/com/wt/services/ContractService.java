@@ -12,6 +12,7 @@ public interface ContractService {
     public void delete(int id);
     public void update(Contract contract);
     public List<Contract> ContractList();
+    public List<Contract> noVerify();
     public Contract getContractById(int id);
     public Contract getContractByConSN(String conSN);  //根据合同号查询
     /**

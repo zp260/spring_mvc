@@ -83,7 +83,7 @@
                 <option value="conSN">按合同号查询</option>
                 <option value="supplier">按供应商查询</option>
                 <option value="goodsName">按货物名称查询</option>
-                <option value="userORG">按使用单位查询</option>
+                <option value="useORG">按使用单位查询</option>
                 <option value="conDate">按签订时间查询</option>
             </select>
         </li>
@@ -385,6 +385,7 @@
      <th>折人民币金额 </th>
      <th>交货日期 </th>
      <th>合同来源 </th>
+        <th>操作</th>
     </tr>
 <c:forEach var="con" items="${list}">
     <tr>
@@ -399,7 +400,7 @@
       <td>${con.atRMB}</td>
       <td>${con.deliveryDate}</td>
       <td>${con.conFrom}</td>
-        <td><a href="/conbase/del?id=${con.id}">删除</a></td>
+        <td><a href="/conbase/del?id=${con.id}">删除 &nbsp;<a href="/conbase/edit?id=${con.id}">编辑</a></a></td>
         <td><a href="/conbase/verify?id=${con.id}">审核</a></td>
     </tr>
 </c:forEach>

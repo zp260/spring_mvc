@@ -2,13 +2,16 @@ package com.wt.services;
 
 import com.wt.dao.GoodsDao;
 import com.wt.model.Goods;
+import com.wt.searchBean.GoodAndCon;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by mrz on 16/8/1.
  */
+@Service
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     GoodsDao goodsDao;
@@ -37,4 +40,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
     @Override
     public Goods getGoodByName(String goodName){return goodsDao.getGoodByName(goodName);}
+    @Override
+    public List<GoodAndCon> search(String filedname, String value){return goodsDao.search(filedname,value);}
 }

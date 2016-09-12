@@ -22,9 +22,9 @@ public class ContractServiceImpl implements ContractService {
         contractDao.update(contract);
     }
     @Override
-    public List<Contract> ContractList(){
-      return   contractDao.ContractList();
-    }
+    public List<Contract> ContractList(){return   contractDao.ContractList();}
+    @Override
+    public List<Contract> noVerify(){return contractDao.noVerify();}
     @Override
     public Contract getContractById(int id){return  contractDao.getContractById(id);}
     @Override

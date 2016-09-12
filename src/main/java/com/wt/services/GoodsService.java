@@ -1,6 +1,7 @@
 package com.wt.services;
 
 import com.wt.model.Goods;
+import com.wt.searchBean.GoodAndCon;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface GoodsService {
     public List<Goods> goodsListByConStage(String con,Integer num);
     public Goods getGoodById(int id);
     public Goods getGoodByName(String goodName);
+    public List<GoodAndCon> search(String filedname, String value);
 }

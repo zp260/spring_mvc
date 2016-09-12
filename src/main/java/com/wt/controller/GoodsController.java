@@ -3,6 +3,7 @@ package com.wt.controller;
 import com.wt.controller.util.CallbackMap;
 import com.wt.controller.util.UserPowerMap;
 import com.wt.model.Goods;
+import com.wt.searchBean.GoodAndCon;
 import com.wt.services.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,10 +51,15 @@ public class GoodsController {
         return "/goods/add";
     }
 
-    @RequestMapping("/goods/list")
+    @RequestMapping(value = {"/goods/list","/goods"})
     public ModelAndView goodsList(){
       List<Goods> list = goodsService.goodsList();
      return new ModelAndView("/goods/list","list",list);
+    }
+    @RequestMapping("/goods/search")
+    public  ModelAndView searchList(@RequestParam(value = "filedName")String filedName,@RequestParam(value = "value")String value){
+        List<GoodAndCon> list = goodsService.search(filedName,value);
+        return new ModelAndView("/goods/list","list",list);
     }
 
     @RequestMapping("/goods/editByid")
