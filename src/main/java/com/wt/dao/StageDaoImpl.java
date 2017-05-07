@@ -2,7 +2,9 @@ package com.wt.dao;
 
 import com.wt.jdbc.StageRowMapper;
 import com.wt.model.Stage;
+import com.wt.searchBean.DeclareBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -12,14 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import com.wt.controller.BaseController;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by mrz on 16/7/20.
  */
+@Repository
 public class StageDaoImpl extends BaseController implements StageDao {
     @Autowired
     DataSource dataSource;
-
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
 
     @Override
@@ -67,8 +72,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
                 "bankFHtime," +
                 "getFHtime) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         jdbcTemplate.update(sqlstr,new Object[]{
                 stage.getConSN(),
@@ -171,7 +174,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
                 "        bankFHtime=?," +
                 "        getFHtime=?" +
                 "        WHERE id= ?";
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql,new Object[]{
                 stage.getConSN(),
                 stage.getStageNum(),
@@ -230,14 +232,12 @@ public class StageDaoImpl extends BaseController implements StageDao {
     @Override
     public void delete(int id){
         String sql = "DELETE FROM stage WHERE id="+id;
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(sql);
     }
     @Override
     public List<Stage> getStageList(){
         List<Stage> stageList= new ArrayList<Stage>();
         String sql = "SELECT * FROM stage";
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper());
         return  stageList;
     }
@@ -245,7 +245,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
     public List<Stage> getStageListByConSN(String conSN){
         List<Stage> stageList= new ArrayList<Stage>();
         String sql = "SELECT * FROM stage WHERE conSN = ?";
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper(),new Object[]{conSN});
         return  stageList;
     }
@@ -253,7 +252,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
     public Stage getStageById(int id){
         List<Stage> stageList = new ArrayList<Stage>();
         String sql = "SELECT * FROM stage where id="+id;
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper());
         try{
             return stageList.get(0);
@@ -267,7 +265,6 @@ public class StageDaoImpl extends BaseController implements StageDao {
     public Stage getStageByStageNum(Integer num,String conSn){
         List<Stage> stageList = new ArrayList<Stage>();
         String sql = "SELECT * FROM stage where stageNum=? AND conSN=?";
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         stageList = jdbcTemplate.query(sql,new StageRowMapper(),new Object[]{num,conSn});
         try{
             return stageList.get(0);
@@ -278,9 +275,40 @@ public class StageDaoImpl extends BaseController implements StageDao {
     }
     @Override
     public Integer getStageNumByContract(String contractSN){
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         String sql = "SELECT COUNT(stageNum) from stage WHERE conSN=?";
         Integer count= jdbcTemplate.queryForObject(sql,new Object[]{contractSN},Integer.class);
         return count;
+    }
+    /**
+     * 根据字段名进行搜索
+     * @param fieldName 字段名
+     * @param value 字段值
+     * @return
+     */
+    @Override
+    public List<Stage> selectByFiledName(String fieldName,Object value){
+        String sql = "SELECT * from stage WHERE "+fieldName+" LIKE '%"+value+"%'";
+        List<Stage> contractList = jdbcTemplate.query(sql, new StageRowMapper());
+        return contractList;
+    }
+    @Override
+    public List<DeclareBean> selectByDate(String startDate,String endDate){
+        String sql =  "SELECT " +
+                "stage.id," +
+                "stage.cdTime," +
+                "stage.conSN," +
+                "stage.cdSN," +
+                "stage.cdPrice," +
+                "stage.stageNum," +
+                "conBase.useORG" +
+                " FROM "+
+                "stage,conBase" +
+                " WHERE "+
+                "stage.conSN = conBase.conSN" +
+                " AND " +
+                "cdTime  BETWEEN ? AND ?";
+        List<DeclareBean> list =  jdbcTemplate.query(sql,new BeanPropertyRowMapper<DeclareBean>(DeclareBean.class),new Object[]{startDate,endDate});
+        return list;
+
     }
 }

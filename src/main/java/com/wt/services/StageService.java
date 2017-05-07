@@ -1,6 +1,7 @@
 package com.wt.services;
 
 import com.wt.model.Stage;
+import com.wt.searchBean.DeclareBean;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface StageService {
     public Stage getStageById(int id);
     public Stage getStageByStageNum(Integer num,String conSn);
     public Integer getStageNumByContract(String contractSN);
+    public List<DeclareBean> selectByDate(String startDate, String endDate);
 }

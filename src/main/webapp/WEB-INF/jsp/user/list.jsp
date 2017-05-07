@@ -12,6 +12,7 @@
     <title>用户列表</title>
 </head>
 <body>
+<a href="/user/add">添加用户</a>
  <table>
      <tr>
          <th>ID</th>

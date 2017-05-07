@@ -76,10 +76,10 @@ public class FilterUtil {
             }
 
         }
-        if (scriptWrong.contains(s)){
-            flag =false;
-            System.out.println("包含有注入字符"+s);
-        }
+//        if (scriptWrong.contains(s)){
+//            flag =false;
+//            System.out.println("包含有注入字符"+s);
+//        }
         return  flag;
     }
 }

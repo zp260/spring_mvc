@@ -26,7 +26,7 @@ public class LoginController {
         ModelAndView model = new ModelAndView();
 
         if (error != null){
-            model.addObject("error","未成功登陆，请输入登陆帐号和密码");
+            model.addObject("error","未成功登陆，请检查登陆帐号和密码");
         }
         if (loginOut != null){
             model.addObject("msg","您已经退出登陆");
@@ -51,6 +51,8 @@ public class LoginController {
                     httpSession.setAttribute(SessionHelper.UserHandler, logined);
                 }
                 model.setViewName("redirect:/login2.html");
+            }else {
+                model.setViewName("redirect:/index?error=error");
             }
 
         }

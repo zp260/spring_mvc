@@ -7,10 +7,7 @@ import com.wt.searchBean.GoodAndCon;
 import com.wt.services.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
@@ -53,10 +50,9 @@ public class GoodsController {
 
     @RequestMapping(value = {"/goods/list","/goods"})
     public ModelAndView goodsList(){
-      List<Goods> list = goodsService.goodsList();
-     return new ModelAndView("/goods/list","list",list);
+     return new ModelAndView("/goods/list");
     }
-    @RequestMapping("/goods/search")
+    @RequestMapping(value = "/goods/search",method = RequestMethod.POST)
     public  ModelAndView searchList(@RequestParam(value = "filedName")String filedName,@RequestParam(value = "value")String value){
         List<GoodAndCon> list = goodsService.search(filedName,value);
         return new ModelAndView("/goods/list","list",list);
@@ -98,6 +94,15 @@ public class GoodsController {
         ModelAndView mv = new ModelAndView();
         Map<String,Object> map = new CallbackMap("删除成功",true,null).getCallBackMap();
         goodsService.deleteGoods(id);
+        mv.setView(new MappingJackson2JsonView());
+        mv.addAllObjects(map);
+        return mv;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/goods/getByConStage",produces = {"application/json;charset=UTF-8"})
+    public ModelAndView delGood(@RequestParam String conSn,@RequestParam("stageNum")String stageNum){
+        ModelAndView mv = new ModelAndView();
+        Map<String,Object> map = new CallbackMap("数据获取成功",true,null).getCallBackMap();
         mv.setView(new MappingJackson2JsonView());
         mv.addAllObjects(map);
         return mv;

@@ -42,7 +42,7 @@ public class UserController extends BaseController {
         //权限列表
         Map<Integer,String> powerList = new UserPowerMap().getPowerListMap();//        获取枚举权限枚举，写入权限列表
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<String, Object>();
         map.put("powerName",powerName);
         map.put("powerList",powerList);
         return new ModelAndView("/user/reg","map",map);

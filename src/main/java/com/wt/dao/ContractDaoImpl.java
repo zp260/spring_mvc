@@ -200,9 +200,9 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
      */
     @Override
     public List<Contract> selectAll(String fieldName,Object value){
-        String sql = "SELECT * from conBase WHERE "+fieldName+"=? AND isInPort=TRUE";
+        String sql = "SELECT * from conBase WHERE "+fieldName+" LIKE '%"+value+"%' AND isInPort=TRUE";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
-        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{value});
+        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return contractList;
     }
     @Override
@@ -214,9 +214,9 @@ public class ContractDaoImpl extends BaseController implements ContractDao {
     }
     @Override
     public List<Contract> getConByGood(String goodName){
-        String sql = "select conBase.* FROM goods,conBase WHERE isInPort=TRUE AND goods.goodsName = ? AND conBase.conSN = goods.conSN GROUP BY conSN ORDER BY id";
+        String sql = "select conBase.* FROM goods,conBase WHERE isInPort=TRUE AND goods.goodsName LIKE '%"+goodName+"%' AND conBase.conSN = goods.conSN GROUP BY conSN ORDER BY id";
         JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
-        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper(),new Object[]{goodName});
+        List<Contract> contractList = jdbcTemplate.query(sql, new ContractRowMapper());
         return contractList;
     }
 

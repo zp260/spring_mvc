@@ -43,7 +43,7 @@ ul li{ list-style: none; -webkit-padding-start: 0; -webkit-margin-before: 0; -we
 .ne { float:left; width: 19.5%; margin-right:0.5%; margin-bottom:5px; }
 .nav_ul{float:left; padding-left: 0;}
 .new_a { width:50px; height:18px; margin-top: 3px; cursor:pointer; float:left; line-height:18px; background:#666; border-radius:5px; font-size:12px; display:inline-block; text-decoration:none; color:#fff; margin-left:8px; background-image: linear-gradient(to bottom, #333 0, #666 100%); }
-.footer, .del{ height:30px; line-height: 30px; padding: 20px 38px 20px 26px;}
+.footer, .del{ height:30px; line-height: 30px; padding: 20px 38px 20px 26px;clear: both;}
 .zj{ width: 120px; height:30px; cursor:pointer; border: 0; line-height: 30px; color: #fff; border-radius:4px; background: #2a5caa; display: inline-block; text-align: center;}
 .zj_a{ width: 80px; height:30px; line-height: 30px; color: #fff; border-radius:4px; background: #7bbfea; display: inline-block; text-align: center;}
 .zj:hover, .del .zj_a:hover{ background: #224c99;}
